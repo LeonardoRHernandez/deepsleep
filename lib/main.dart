@@ -135,11 +135,150 @@ class _SleepScreenState extends State<SleepScreen> {
     );
   }
 
-  Widget _buildExerciseTab() {
-    return Center(
-      child: Text(
-        'Sección de Ejercicio (por agregar)',
-        style: TextStyle(fontSize: 16, color: Colors.grey[600]),
+    Widget _buildExerciseTab() {
+    return SingleChildScrollView(
+      padding: const EdgeInsets.all(16),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // Progreso semanal
+          Container(
+            padding: const EdgeInsets.all(16),
+            decoration: BoxDecoration(
+              color: Colors.grey[100],
+              borderRadius: BorderRadius.circular(12),
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Text("Progreso Semanal", style: TextStyle(fontWeight: FontWeight.bold)),
+                const SizedBox(height: 8),
+                Stack(
+                  children: [
+                    LinearProgressIndicator(
+                      value: 8.5 / 10,
+                      minHeight: 14,
+                      backgroundColor: Colors.grey[300],
+                      valueColor: AlwaysStoppedAnimation<Color>(Colors.green),
+                    ),
+                    Positioned.fill(
+                      child: Center(
+                        child: Text("8.5h / 10h", style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold)),
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(height: 16),
+
+          // Calorías y ritmo cardíaco
+          Row(
+            children: [
+              Expanded(
+                child: _buildMetricCard(Icons.local_fire_department, "1,200 kcal", "Quemadas", Colors.blue),
+              ),
+              const SizedBox(width: 12),
+              Expanded(
+                child: _buildMetricCard(Icons.favorite, "75 BMP", "Ritmo cardíaco", Colors.purple),
+              ),
+            ],
+          ),
+          const SizedBox(height: 16),
+
+          // Lista de ejercicios
+          _buildExerciseItem("Cardio Intenso", "15 oct - 1h 20 min", 300),
+          const SizedBox(height: 12),
+          _buildExerciseItem("Entrenamiento de Fuerza", "14 oct - 40 min", 450),
+          const SizedBox(height: 16),
+
+          // Ritmo cardíaco (gráfico simulado)
+          Container(
+            padding: const EdgeInsets.all(16),
+            decoration: BoxDecoration(
+              color: Colors.grey[100],
+              borderRadius: BorderRadius.circular(12),
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: const [
+                Text("Ritmo Cardíaco", style: TextStyle(fontWeight: FontWeight.bold)),
+                SizedBox(height: 16),
+                Icon(Icons.show_chart, size: 60, color: Colors.redAccent), // simulando el gráfico
+              ],
+            ),
+          ),
+          const SizedBox(height: 16),
+
+          // Botón de agregar ejercicio
+          Center(
+            child: ElevatedButton.icon(
+              onPressed: () {},
+              icon: const Icon(Icons.add),
+              label: const Text("Ejercicio"),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.blue[800],
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(24),
+                ),
+                padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildMetricCard(IconData icon, String value, String label, Color color) {
+    return Container(
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        border: Border.all(color: color.withOpacity(0.2)),
+        borderRadius: BorderRadius.circular(12),
+      ),
+      child: Column(
+        children: [
+          Icon(icon, color: color),
+          const SizedBox(height: 8),
+          Text(value, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
+          Text(label, style: const TextStyle(color: Colors.grey, fontSize: 12)),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildExerciseItem(String title, String subtitle, int kcal) {
+    return Container(
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        border: Border.all(color: Colors.grey[200]!),
+        borderRadius: BorderRadius.circular(12),
+      ),
+      child: Row(
+        children: [
+          Icon(Icons.fitness_center, color: Colors.blue),
+          const SizedBox(width: 12),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(title, style: const TextStyle(fontWeight: FontWeight.bold)),
+                Text(subtitle, style: const TextStyle(color: Colors.grey, fontSize: 12)),
+              ],
+            ),
+          ),
+          Row(
+            children: const [
+              Icon(Icons.local_fire_department, color: Colors.orange),
+              SizedBox(width: 4),
+            ],
+          ),
+          Text("$kcal kcal", style: const TextStyle(fontWeight: FontWeight.bold)),
+        ],
       ),
     );
   }
