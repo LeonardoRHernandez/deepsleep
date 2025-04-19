@@ -1,468 +1,61 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart'; 
+import 'Pantallas/pantalla_sueno.dart';
+import 'Pantallas/pantalla_ejercicio.dart';
 
 void main() {
-  runApp(SleepApp());
+  runApp(const MiApp());
 }
 
-class SleepApp extends StatelessWidget {
-  const SleepApp({super.key});
+class MiApp extends StatelessWidget {
+  const MiApp({super.key});
+
   @override
   Widget build(BuildContext context) {
-    SystemChrome.setSystemUIOverlayStyle(
-      SystemUiOverlayStyle(
-        statusBarColor: Colors.transparent, // Si quieres que sea transparente
-        statusBarIconBrightness: Brightness.dark, // Establece los iconos de la barra de estado a oscuro
-      ),
-    );
-    return MaterialApp(
-      title: 'Mi Sueño',
-      theme: ThemeData(primarySwatch: Colors.blue),
-      home: SleepScreen(),
+    return const MaterialApp(
       debugShowCheckedModeBanner: false,
+      home: PaginaPrincipal(),
     );
   }
 }
 
-class SleepScreen extends StatefulWidget {
-  const SleepScreen({super.key});
+class PaginaPrincipal extends StatefulWidget {
+  const PaginaPrincipal({super.key});
+
   @override
-  State<SleepScreen> createState() => _SleepScreenState();
+  State<PaginaPrincipal> createState() => _PaginaPrincipalState();
 }
 
-class _SleepScreenState extends State<SleepScreen> {
-  int selectedIndex = 0; // 0 = Sueño, 1 = Ejercicio
+class _PaginaPrincipalState extends State<PaginaPrincipal> {
+  int _selectedIndex = 0;
+
+  void _onItemTapped(int index) {
+    setState(() {
+      _selectedIndex = index;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
-      body: SafeArea(
-        child: Column(
-          children: [
-            _buildToggleNavigation(),
-            _buildTitleAndNotification(),
-            const Divider(height: 1),
-            Expanded(
-              child: selectedIndex == 0 ? _buildSleepTab() : _buildExerciseTab(),
-            ),
-          ],
-        ),
+      appBar: AppBar(
+        title: const Text("Deep Sleep"),
+        backgroundColor: Colors.blueAccent,
       ),
-    );
-  }
-
-  Widget _buildToggleNavigation() {
-    return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-      decoration: BoxDecoration(
-        color: Colors.grey[200],
-        borderRadius: BorderRadius.circular(25),
-      ),
-      child: Row(
-        children: [
-          _buildTabButton("Sueño", 0),
-          _buildTabButton("Ejercicio", 1),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildTabButton(String label, int index) {
-    final bool isSelected = selectedIndex == index;
-    return Expanded(
-      child: GestureDetector(
-        onTap: () => setState(() => selectedIndex = index),
-        child: Container(
-          padding: const EdgeInsets.symmetric(vertical: 12),
-          decoration: BoxDecoration(
-            color: isSelected ? Colors.white : Colors.transparent,
-            borderRadius: BorderRadius.circular(25),
+      body: _selectedIndex == 0 ? const PantallaSueno() : const PantallaEjercicio(),
+      bottomNavigationBar: BottomNavigationBar(
+        currentIndex: _selectedIndex,
+        onTap: _onItemTapped,
+        items: const [
+          BottomNavigationBarItem(
+            icon: Icon(Icons.bedtime),
+            label: 'Sueño',
           ),
-          alignment: Alignment.center,
-          child: Text(
-            label,
-            style: TextStyle(
-              color: isSelected ? Colors.black : Colors.grey[600],
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget _buildTitleAndNotification() {
-  return Container(
-    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-    color: Color(0xFF05576A), // Fondo azul oscuro como el del degradado
-    child: Row(
-      children: [
-        const Expanded(
-          child: Text(
-            'Mi Sueño',
-            style: TextStyle(
-              fontSize: 22,
-              fontWeight: FontWeight.bold,
-              color: Colors.white, // Texto blanco para contraste
-            ),
-          ),
-        ),
-        Icon(Icons.notifications, color: Colors.white),
-      ],
-    ),
-  );
-  
-}
-
-  Widget _buildSleepTab() {
-    return SingleChildScrollView(
-      padding: const EdgeInsets.all(16),
-      child: Column(
-        children: [
-          const SizedBox(height: 12),
-          _buildSleepTime(),
-          const SizedBox(height: 20),
-          _buildRecordAndAverage(),
-          const SizedBox(height: 16),
-          _buildRecommendation(),
-          const SizedBox(height: 16),
-          _buildSleepDetails(),
-          const SizedBox(height: 20),
-          _buildSleepHistory(),
-        ],
-      ),
-    );
-  }
-
-    Widget _buildExerciseTab() {
-    return SingleChildScrollView(
-      padding: const EdgeInsets.all(16),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          // Progreso semanal
-          Container(
-            padding: const EdgeInsets.all(16),
-            decoration: BoxDecoration(
-              color: Colors.grey[100],
-              borderRadius: BorderRadius.circular(12),
-            ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const Text("Progreso Semanal", style: TextStyle(fontWeight: FontWeight.bold)),
-                const SizedBox(height: 8),
-                Stack(
-                  children: [
-                    LinearProgressIndicator(
-                      value: 8.5 / 10,
-                      minHeight: 14,
-                      backgroundColor: Colors.grey[300],
-                      valueColor: AlwaysStoppedAnimation<Color>(Colors.green),
-                    ),
-                    Positioned.fill(
-                      child: Center(
-                        child: Text("8.5h / 10h", style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold)),
-                      ),
-                    ),
-                  ],
-                ),
-              ],
-            ),
-          ),
-          const SizedBox(height: 16),
-
-          // Calorías y ritmo cardíaco
-          Row(
-            children: [
-              Expanded(
-                child: _buildMetricCard(Icons.local_fire_department, "1,200 kcal", "Quemadas", Colors.blue),
-              ),
-              const SizedBox(width: 12),
-              Expanded(
-                child: _buildMetricCard(Icons.favorite, "75 BMP", "Ritmo cardíaco", Colors.purple),
-              ),
-            ],
-          ),
-          const SizedBox(height: 16),
-
-          // Lista de ejercicios
-          _buildExerciseItem("Cardio Intenso", "15 oct - 1h 20 min", 300),
-          const SizedBox(height: 12),
-          _buildExerciseItem("Entrenamiento de Fuerza", "14 oct - 40 min", 450),
-          const SizedBox(height: 16),
-
-          // Ritmo cardíaco (gráfico simulado)
-          Container(
-            padding: const EdgeInsets.all(16),
-            decoration: BoxDecoration(
-              color: Colors.grey[100],
-              borderRadius: BorderRadius.circular(12),
-            ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: const [
-                Text("Ritmo Cardíaco", style: TextStyle(fontWeight: FontWeight.bold)),
-                SizedBox(height: 16),
-                Icon(Icons.show_chart, size: 60, color: Colors.redAccent), // simulando el gráfico
-              ],
-            ),
-          ),
-          const SizedBox(height: 16),
-
-          // Botón de agregar ejercicio
-          Center(
-            child: ElevatedButton.icon(
-              onPressed: () {},
-              icon: const Icon(Icons.add),
-              label: const Text("Ejercicio"),
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.blue[800],
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(24),
-                ),
-                padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
-              ),
-            ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.fitness_center),
+            label: 'Ejercicio',
           ),
         ],
       ),
-    );
-  }
-
-  Widget _buildMetricCard(IconData icon, String value, String label, Color color) {
-    return Container(
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        border: Border.all(color: color.withOpacity(0.2)),
-        borderRadius: BorderRadius.circular(12),
-      ),
-      child: Column(
-        children: [
-          Icon(icon, color: color),
-          const SizedBox(height: 8),
-          Text(value, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
-          Text(label, style: const TextStyle(color: Colors.grey, fontSize: 12)),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildExerciseItem(String title, String subtitle, int kcal) {
-    return Container(
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        border: Border.all(color: Colors.grey[200]!),
-        borderRadius: BorderRadius.circular(12),
-      ),
-      child: Row(
-        children: [
-          Icon(Icons.fitness_center, color: Colors.blue),
-          const SizedBox(width: 12),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(title, style: const TextStyle(fontWeight: FontWeight.bold)),
-                Text(subtitle, style: const TextStyle(color: Colors.grey, fontSize: 12)),
-              ],
-            ),
-          ),
-          Row(
-            children: const [
-              Icon(Icons.local_fire_department, color: Colors.orange),
-              SizedBox(width: 4),
-            ],
-          ),
-          Text("$kcal kcal", style: const TextStyle(fontWeight: FontWeight.bold)),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildSleepTime() {
-  return Container(
-    padding: const EdgeInsets.all(16),
-    decoration: BoxDecoration(
-      gradient: LinearGradient(
-        colors: [
-          Color(0xFF05576A),
-          Color(0xFF0AACD0),
-        ],
-        begin: Alignment.centerLeft,
-        end: Alignment.centerRight,
-        stops: [0.31, 1.0],
-      ),
-      borderRadius: BorderRadius.circular(12),
-    ),
-    child: Column(
-      children: [
-        Container(
-          width: 150,
-          height: 150,
-          decoration: const BoxDecoration(
-            color: Colors.black,
-            shape: BoxShape.circle,
-          ),
-          alignment: Alignment.center,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: const [
-              Text(
-                '7H 42M',
-                style: TextStyle(
-                  fontSize: 22,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.white,
-                ),
-              ),
-              SizedBox(height: 10),
-              Text(
-                'Tiempo total',
-                style: TextStyle(
-                  fontSize: 11,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.white,
-                ),
-              ),
-            ],
-          ),
-        ),
-        const SizedBox(height: 16),
-        ClipRRect(
-          borderRadius: BorderRadius.all(Radius.circular(8)),
-          child: LinearProgressIndicator(
-            value: 7 / 8,
-            minHeight: 20, // Aumenta si quieres un efecto más visible
-            backgroundColor: Colors.black,
-            valueColor: AlwaysStoppedAnimation<Color>(Colors.lightBlueAccent),
-          ),
-        ),
-      ],
-    ),
-  );
-}
-  Widget _buildRecordAndAverage() {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-      children: [
-        _buildStatCard('🏆', 'Tu récord', '8H\n15M', '12 de enero'),
-        _buildStatCard('📊', 'Promedio', '7H\n18M', 'Últimos 7 días'),
-      ],
-    );
-  }
-
-  Widget _buildStatCard(String icon, String title, String value, String subtitle) {
-    return Container(
-      width: 160,
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: Colors.grey[100],
-        borderRadius: BorderRadius.circular(12),
-      ),
-      child: Column(
-        children: [
-          Text(icon, style: const TextStyle(fontSize: 28)),
-          const SizedBox(height: 6),
-          Text(title, style: const TextStyle(fontWeight: FontWeight.bold)),
-          const SizedBox(height: 4),
-          Text(value, style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold), textAlign: TextAlign.center),
-          const SizedBox(height: 2),
-          Text(subtitle, style: const TextStyle(color: Colors.grey, fontSize: 12)),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildRecommendation() {
-    return Container(
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: Colors.yellow[100],
-        borderRadius: BorderRadius.circular(12),
-      ),
-      child: Row(
-        children: const [
-          Icon(Icons.lightbulb_outline, color: Colors.orange),
-          SizedBox(width: 10),
-          Expanded(
-            child: Text(
-              'Recomendación: Intenta acostarte 30 minutos antes para alcanzar tu meta de 8 horas',
-              style: TextStyle(fontSize: 14),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildSleepDetails() {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-      children: [
-        _buildDetailCard('🕒', 'Inicio', '23:14'),
-        _buildDetailCard('⏰', 'Despertar', '07:02'),
-        _buildDetailCard('💤', 'Eficiencia', '94%'),
-      ],
-    );
-  }
-
-  Widget _buildDetailCard(String icon, String label, String value) {
-    return Container(
-      width: 100,
-      padding: const EdgeInsets.all(12),
-      decoration: BoxDecoration(
-        color: Colors.blueGrey[50],
-        borderRadius: BorderRadius.circular(12),
-      ),
-      child: Column(
-        children: [
-          Text(icon, style: const TextStyle(fontSize: 28)),
-          const SizedBox(height: 8),
-          Text(label, style: const TextStyle(fontWeight: FontWeight.bold)),
-          const SizedBox(height: 4),
-          Text(value, style: const TextStyle(color: Colors.grey,fontWeight: FontWeight.bold)),
-
-        ],
-      ),
-    );
-  }
-
-  Widget _buildSleepHistory() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        const Padding( // Padding para separar el texto del recuadro
-          padding: EdgeInsets.only(left: 16.0, bottom: 8.0), // Ajusta el padding según sea necesario
-          child: Text('Historial de sueño', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
-        ),
-        Container( // Recuadro para el contenido del historial
-          padding: const EdgeInsets.all(16),
-          decoration: BoxDecoration(
-            color: Colors.grey[100],
-            borderRadius: BorderRadius.circular(12),
-          ),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: const [
-              Text('Hoy',style:  TextStyle(fontWeight: FontWeight.bold)),
-              Row(
-                children: [
-                  Icon(Icons.star, color: Colors.yellow),
-                  Icon(Icons.star, color: Colors.yellow),
-                  Icon(Icons.star, color: Colors.yellow),
-                  Icon(Icons.star, color: Colors.yellow),
-                ],
-              ),
-              Text('7 h 42m',style: TextStyle(color: Colors.grey), 
-              )
-            ],
-          ),
-        ),
-      ],
     );
   }
 }
