@@ -19,7 +19,7 @@ class PantallaEjercicio extends StatelessWidget {
           const SizedBox(height: 16),
           _buildGraficoCardiaco(),
           const SizedBox(height: 16),
-          _buildBotonAgregar(),
+          _buildBotonAgregar(context),
         ],
       ),
     );
@@ -137,10 +137,12 @@ class PantallaEjercicio extends StatelessWidget {
     );
   }
 
-  Widget _buildBotonAgregar() {
+  Widget _buildBotonAgregar(BuildContext context) {
     return Center(
       child: ElevatedButton.icon(
-        onPressed: () {},
+        onPressed: () {
+          _mostrarFormularioDormir(context); 
+        },
         icon: const Icon(Icons.add),
         label: const Text("Ejercicio"),
         style: ElevatedButton.styleFrom(
@@ -149,6 +151,55 @@ class PantallaEjercicio extends StatelessWidget {
           padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
         ),
       ),
+    );
+  }
+
+  void _mostrarFormularioDormir(BuildContext context) {
+    final dormirController = TextEditingController();
+    final despertarController = TextEditingController();
+
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text("Agregar horas de sueño"),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              TextField(
+                controller: dormirController,
+                decoration: const InputDecoration(
+                  labelText: "Hora que te fuiste a dormir",
+                  hintText: "Ej. 22:30",
+                ),
+                keyboardType: TextInputType.datetime,
+              ),
+              const SizedBox(height: 12),
+              TextField(
+                controller: despertarController,
+                decoration: const InputDecoration(
+                  labelText: "Hora que te despertaste",
+                  hintText: "Ej. 07:00",
+                ),
+                keyboardType: TextInputType.datetime,
+              ),
+            ],
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: const Text("Cancelar"),
+            ),
+            ElevatedButton(
+              onPressed: () {
+              },
+              child: const Text("Guardar"),
+            ),
+          ],
+        );
+      },
     );
   }
 }

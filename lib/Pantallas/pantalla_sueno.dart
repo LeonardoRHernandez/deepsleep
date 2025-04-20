@@ -6,21 +6,48 @@ class PantallaSueno extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      padding: const EdgeInsets.all(16),
-      child: Column(
-        children: [
-          const SizedBox(height: 12),
-          _buildSleepTime(),
-          const SizedBox(height: 20),
-          _buildRecordAndAverage(),
-          const SizedBox(height: 16),
-          _buildRecommendation(),
-          const SizedBox(height: 16),
-          _buildSleepDetails(),
-          const SizedBox(height: 20),
-          _buildSleepHistory(),
-        ],
+    return Scaffold(
+      body: SafeArea(
+        child: Column(
+          children: [
+            // Encabezado fijo arriba
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: const [
+                  Text(
+                    'Mi sueño',
+                    style: TextStyle(
+                      fontSize: 24,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  Icon(Icons.notifications, color: Colors.black),
+                ],
+              ),
+            ),
+            // Contenido scrollable
+            Expanded(
+              child: SingleChildScrollView(
+                padding: const EdgeInsets.all(16),
+                child: Column(
+                  children: [
+                    _buildSleepTime(),
+                    const SizedBox(height: 20),
+                    _buildRecordAndAverage(),
+                    const SizedBox(height: 16),
+                    _buildRecommendation(),
+                    const SizedBox(height: 16),
+                    _buildSleepDetails(),
+                    const SizedBox(height: 20),
+                    _buildSleepHistory(),
+                  ],
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
