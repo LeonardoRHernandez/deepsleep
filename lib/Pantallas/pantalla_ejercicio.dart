@@ -4,26 +4,37 @@ import 'package:flutter/material.dart';
 class PantallaEjercicio extends StatelessWidget {
   const PantallaEjercicio({super.key});
 
-  @override
-  Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      padding: const EdgeInsets.all(16),
+@override
+Widget build(BuildContext context) {
+  return Scaffold(
+    body: SafeArea(
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          _buildProgreso(),
-          const SizedBox(height: 16),
-          _buildMetricos(),
-          const SizedBox(height: 16),
-          _buildListaEjercicios(),
-          const SizedBox(height: 16),
-          _buildGraficoCardiaco(),
-          const SizedBox(height: 16),
-          _buildBotonAgregar(context),
+          _buildEncabezadoFijo("Mi ejercicio"),
+          Expanded(
+            child: SingleChildScrollView(
+              padding: const EdgeInsets.all(16),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  _buildProgreso(),
+                  const SizedBox(height: 16),
+                  _buildMetricos(),
+                  const SizedBox(height: 16),
+                  _buildListaEjercicios(),
+                  const SizedBox(height: 16),
+                  _buildGraficoCardiaco(),
+                  const SizedBox(height: 16),
+                  _buildBotonAgregar(context),
+                ],
+              ),
+            ),
+          ),
         ],
       ),
-    );
-  }
+    ),
+  );
+}
 
   Widget _buildProgreso() {
     return Container(
@@ -35,20 +46,26 @@ class PantallaEjercicio extends StatelessWidget {
           const Text("Progreso Semanal", style: TextStyle(fontWeight: FontWeight.bold)),
           const SizedBox(height: 8),
           Stack(
-            children: [
-              LinearProgressIndicator(
+          alignment: Alignment.center,
+          children: [
+            ClipRRect(
+              borderRadius: BorderRadius.circular(12),
+              child: LinearProgressIndicator(
                 value: 8.5 / 10,
-                minHeight: 14,
+                minHeight: 20, // Más ancho
                 backgroundColor: Colors.grey[300],
                 valueColor: const AlwaysStoppedAnimation<Color>(Colors.green),
               ),
-              const Positioned.fill(
-                child: Center(
-                  child: Text("8.5h / 10h", style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold)),
-                ),
+            ),
+            const Text(
+              "8.5h / 10h",
+              style: TextStyle(
+                color: Colors.black,
+                fontWeight: FontWeight.bold,
               ),
-            ],
-          ),
+            ),
+          ],
+        )
         ],
       ),
     );
@@ -59,7 +76,7 @@ class PantallaEjercicio extends StatelessWidget {
       children: [
         Expanded(child: _buildMetricCard(Icons.local_fire_department, "1,200 kcal", "Quemadas", Colors.blue)),
         const SizedBox(width: 12),
-        Expanded(child: _buildMetricCard(Icons.favorite, "75 BMP", "Ritmo cardíaco", Colors.purple)),
+        Expanded(child: _buildMetricCard(Icons.favorite, "75 PPM", "Ritmo cardíaco", Colors.purple)),
       ],
     );
   }
@@ -137,22 +154,41 @@ class PantallaEjercicio extends StatelessWidget {
     );
   }
 
-  Widget _buildBotonAgregar(BuildContext context) {
-    return Center(
+Widget _buildBotonAgregar(BuildContext context) {
+  return Center(
+    child: Container(
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(25),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.blue.shade800.withOpacity(0.4),
+            offset: const Offset(0, 4),
+            blurRadius: 10,
+          ),
+        ],
+      ),
       child: ElevatedButton.icon(
         onPressed: () {
           _mostrarFormularioDormir(context); 
         },
-        icon: const Icon(Icons.add),
-        label: const Text("Ejercicio"),
+        icon: const Icon(Icons.fitness_center, size: 24),
+        label: const Text(
+          "Agregar ejercicio",
+          style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+        ),
         style: ElevatedButton.styleFrom(
+          foregroundColor: Colors.white,
           backgroundColor: Colors.blue[800],
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
-          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(32),
+          ),
+          padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 16),
         ),
       ),
-    );
-  }
+    ),
+  );
+}
+
 
   void _mostrarFormularioDormir(BuildContext context) {
     final dormirController = TextEditingController();
@@ -202,4 +238,23 @@ class PantallaEjercicio extends StatelessWidget {
       },
     );
   }
+}
+
+Widget _buildEncabezadoFijo(String titulo) {
+  return Padding(
+    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+    child: Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Text(
+          titulo,
+          style: const TextStyle(
+            fontSize: 24,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        const Icon(Icons.notifications, color: Colors.black),
+      ],
+    ),
+  );
 }
