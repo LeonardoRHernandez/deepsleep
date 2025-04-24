@@ -1,71 +1,105 @@
 // Pantallas/pantalla_ejercicio.dart
 import 'package:flutter/material.dart';
 
-class PantallaEjercicio extends StatelessWidget {
+class PantallaEjercicio extends StatefulWidget {
   const PantallaEjercicio({super.key});
 
-@override
-Widget build(BuildContext context) {
-  return Scaffold(
-    body: SafeArea(
-      child: Column(
-        children: [
-          _buildEncabezadoFijo("Mi ejercicio"),
-          Expanded(
-            child: SingleChildScrollView(
-              padding: const EdgeInsets.all(16),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  _buildProgreso(),
-                  const SizedBox(height: 16),
-                  _buildMetricos(),
-                  const SizedBox(height: 16),
-                  _buildListaEjercicios(),
-                  const SizedBox(height: 16),
-                  _buildGraficoCardiaco(),
-                  const SizedBox(height: 16),
-                  _buildBotonAgregar(context),
-                ],
-              ),
-            ),
-          ),
-        ],
-      ),
-    ),
-  );
+  @override
+  State<PantallaEjercicio> createState() => _PantallaEjercicioState();
 }
 
-  Widget _buildProgreso() {
-    return Container(
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(color: Colors.grey[100], borderRadius: BorderRadius.circular(12)),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const Text("Progreso Semanal", style: TextStyle(fontWeight: FontWeight.bold)),
-          const SizedBox(height: 8),
-          Stack(
-          alignment: Alignment.center,
+class _PantallaEjercicioState extends State<PantallaEjercicio> {
+  bool _esSemanal = true;
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: SafeArea(
+        child: Column(
           children: [
-            ClipRRect(
-              borderRadius: BorderRadius.circular(12),
-              child: LinearProgressIndicator(
-                value: 8.5 / 10,
-                minHeight: 20, // Más ancho
-                backgroundColor: Colors.grey[300],
-                valueColor: const AlwaysStoppedAnimation<Color>(Colors.green),
-              ),
-            ),
-            const Text(
-              "8.5h / 10h",
-              style: TextStyle(
-                color: Colors.black,
-                fontWeight: FontWeight.bold,
+            _buildEncabezadoFijo("Mi ejercicio"),
+            Expanded(
+              child: SingleChildScrollView(
+                padding: const EdgeInsets.all(16),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    _buildProgreso(),
+                    const SizedBox(height: 16),
+                    _buildMetricos(),
+                    const SizedBox(height: 16),
+                    _buildListaEjercicios(),
+                    const SizedBox(height: 16),
+                    _buildGraficoCardiaco(),
+                    const SizedBox(height: 16),
+                    _buildBotonAgregar(context),
+                  ],
+                ),
               ),
             ),
           ],
-        )
+        ),
+      ),
+    );
+  }
+
+  Widget _buildProgreso() {
+    final String titulo = _esSemanal ? "Progreso Semanal" : "Progreso Mensual";
+    final double valor = _esSemanal ? 8.5 / 10 : 32.0 / 40;
+    final String texto = _esSemanal ? "8.5h / 10h" : "32h / 40h";
+
+    return Container(
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: Colors.grey[100],
+        borderRadius: BorderRadius.circular(12),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          GestureDetector(
+            onTap: () {
+              setState(() {
+                _esSemanal = !_esSemanal;
+              });
+            },
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(
+                  titulo,
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    color: Colors.blue[800],
+                  ),
+                ),
+                const SizedBox(width: 6),
+                const Icon(Icons.swap_horiz, size: 18, color: Colors.blue),
+              ],
+            ),
+          ),
+          const SizedBox(height: 8),
+          Stack(
+            alignment: Alignment.center,
+            children: [
+              ClipRRect(
+                borderRadius: BorderRadius.circular(12),
+                child: LinearProgressIndicator(
+                  value: valor,
+                  minHeight: 20,
+                  backgroundColor: Colors.grey[300],
+                  valueColor: const AlwaysStoppedAnimation<Color>(Colors.green),
+                ),
+              ),
+              Text(
+                texto,
+                style: const TextStyle(
+                  color: Colors.black,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ],
+          )
         ],
       ),
     );
