@@ -33,7 +33,6 @@ class _PantallaEjercicioState extends State<PantallaEjercicio> {
                     const SizedBox(height: 16),
                     _buildGraficoCardiaco(),
                     const SizedBox(height: 16),
-                    _buildBotonAgregar(context),
                   ],
                 ),
               ),
@@ -139,7 +138,7 @@ class _PantallaEjercicioState extends State<PantallaEjercicio> {
     return Column(
       children: [
         _buildExerciseItem("Cardio Intenso", "15 oct - 1h 20 min", 300),
-        const SizedBox(height: 12),
+        const SizedBox(height: 6),
         _buildExerciseItem("Entrenamiento de Fuerza", "14 oct - 40 min", 450),
       ],
     );
@@ -236,109 +235,40 @@ class _PantallaEjercicioState extends State<PantallaEjercicio> {
     );
   }
 
-Widget _buildBotonAgregar(BuildContext context) {
-  return Center(
-    child: Container(
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(25),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.blue.shade800.withOpacity(0.4),
-            offset: const Offset(0, 4),
-            blurRadius: 10,
+  Widget _buildEncabezadoFijo(String titulo) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text(
+            titulo,
+            style: const TextStyle(
+              fontSize: 24,
+              fontWeight: FontWeight.bold,
+            ),
           ),
-        ],
-      ),
-      child: ElevatedButton.icon(
-        onPressed: () {
-          _mostrarFormularioDormir(context); 
-        },
-        icon: const Icon(Icons.fitness_center, size: 24),
-        label: const Text(
-          "Agregar ejercicio",
-          style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-        ),
-        style: ElevatedButton.styleFrom(
-          foregroundColor: Colors.white,
-          backgroundColor: Colors.blue[800],
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(32),
-          ),
-          padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 16),
-        ),
-      ),
-    ),
-  );
-}
-
-
-  void _mostrarFormularioDormir(BuildContext context) {
-    final dormirController = TextEditingController();
-    final despertarController = TextEditingController();
-
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: const Text("Agregar horas de sueño"),
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
+          Row(
             children: [
-              TextField(
-                controller: dormirController,
-                decoration: const InputDecoration(
-                  labelText: "Hora que te fuiste a dormir",
-                  hintText: "Ej. 22:30",
-                ),
-                keyboardType: TextInputType.datetime,
+              IconButton(
+              icon: const Icon(Icons.accessibility_new_sharp, color: Colors.black, size: 28),
+                onPressed: () {
+                  print("Aqui va la accion del boton");
+                },
+                tooltip: 'Agregar sueño', // Tooltip al dejar presionado
               ),
-              const SizedBox(height: 12),
-              TextField(
-                controller: despertarController,
-                decoration: const InputDecoration(
-                  labelText: "Hora que te despertaste",
-                  hintText: "Ej. 07:00",
-                ),
-                keyboardType: TextInputType.datetime,
+              const SizedBox(width: 8),
+              IconButton(
+                icon: const Icon(Icons.notifications, color: Colors.black, size: 28),
+                onPressed: () {
+                },
               ),
             ],
           ),
-          actions: [
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-              child: const Text("Cancelar"),
-            ),
-            ElevatedButton(
-              onPressed: () {
-              },
-              child: const Text("Guardar"),
-            ),
-          ],
-        );
-      },
+        ],
+      ),
     );
   }
-}
-
-Widget _buildEncabezadoFijo(String titulo) {
-  return Padding(
-    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-    child: Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Text(
-          titulo,
-          style: const TextStyle(
-            fontSize: 24,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-        const Icon(Icons.notifications, color: Colors.black),
-      ],
-    ),
-  );
 }
 
 class _CardiacoDato extends StatelessWidget {

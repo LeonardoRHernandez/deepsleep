@@ -15,15 +15,32 @@ class PantallaSueno extends StatelessWidget {
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: const [
-                  Text(
+                children: [
+                  const Text(
                     'Mi sueño',
                     style: TextStyle(
                       fontSize: 24,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                  Icon(Icons.notifications, color: Colors.black),
+                  Row(
+                    children: [
+                      IconButton(
+                        icon: const Icon(Icons.bed, color: Colors.black, size: 28),
+                        onPressed: () {
+                          _mostrarFormularioDormir(context);
+                        },
+                        tooltip: 'Agregar sueño',
+                      ),
+                      const SizedBox(width: 8),
+                      IconButton(
+                        icon: const Icon(Icons.notifications, color: Colors.black, size: 28),
+                        onPressed: () {
+                          // Acción de notificaciones si quieres
+                        },
+                      ),
+                    ],
+                  ),
                 ],
               ),
             ),
@@ -199,6 +216,56 @@ class PantallaSueno extends StatelessWidget {
           ),
         ),
       ],
+    );
+  }
+
+
+  void _mostrarFormularioDormir(BuildContext context) {
+    final dormirController = TextEditingController();
+    final despertarController = TextEditingController();
+
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text("Agregar horas de sueño"),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              TextField(
+                controller: dormirController,
+                decoration: const InputDecoration(
+                  labelText: "Hora que te fuiste a dormir",
+                  hintText: "Ej. 22:30",
+                ),
+                keyboardType: TextInputType.datetime,
+              ),
+              const SizedBox(height: 12),
+              TextField(
+                controller: despertarController,
+                decoration: const InputDecoration(
+                  labelText: "Hora que te despertaste",
+                  hintText: "Ej. 07:00",
+                ),
+                keyboardType: TextInputType.datetime,
+              ),
+            ],
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: const Text("Cancelar"),
+            ),
+            ElevatedButton(
+              onPressed: () {
+              },
+              child: const Text("Guardar"),
+            ),
+          ],
+        );
+      },
     );
   }
 }
