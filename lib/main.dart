@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'Pantallas/pantalla_sueno.dart';
-import 'Pantallas/pantalla_ejercicio.dart';
+import 'presentation/views/Sueno/pantalla_sueno.dart';
+import 'presentation/views/actividad/pantalla_ejercicio.dart';
 
 void main() {
   runApp(const MiApp());
