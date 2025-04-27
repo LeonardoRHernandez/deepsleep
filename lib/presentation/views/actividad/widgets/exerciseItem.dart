@@ -1,4 +1,7 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
+import 'package:deepsleep/presentation/controllers/ExerciseController/historialExercice.dart';
 class BuildExerciseItem extends StatelessWidget {
   const BuildExerciseItem({
     super.key,
@@ -15,7 +18,11 @@ class BuildExerciseItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(color: Colors.white, border: Border.all(color: Colors.grey[200]!), borderRadius: BorderRadius.circular(12)),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        border: Border.all(color: Colors.grey[200]!),
+        borderRadius: BorderRadius.circular(12),
+      ),
       child: Row(
         children: [
           const Icon(Icons.fitness_center, color: Colors.blue),
@@ -24,8 +31,14 @@ class BuildExerciseItem extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(title, style: const TextStyle(fontWeight: FontWeight.bold)),
-                Text(subtitle, style: const TextStyle(color: Colors.grey, fontSize: 12)),
+                Text(
+                  title,
+                  style: const TextStyle(fontWeight: FontWeight.bold),
+                ),
+                Text(
+                  subtitle,
+                  style: const TextStyle(color: Colors.grey, fontSize: 12),
+                ),
               ],
             ),
           ),
@@ -35,7 +48,10 @@ class BuildExerciseItem extends StatelessWidget {
               SizedBox(width: 4),
             ],
           ),
-          Text("$kcal kcal", style: const TextStyle(fontWeight: FontWeight.bold)),
+          Text(
+            "$kcal kcal",
+            style: const TextStyle(fontWeight: FontWeight.bold),
+          ),
         ],
       ),
     );
@@ -43,18 +59,30 @@ class BuildExerciseItem extends StatelessWidget {
 }
 
 class BuildListaEjercicios extends StatelessWidget {
-  const BuildListaEjercicios({
-    super.key,
-  });
-
+  BuildListaEjercicios({super.key});
+  //var exerciseList= ListaEjercicios().exerciseList;
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        BuildExerciseItem(title: "Cardio Intenso", subtitle: "15 oct - 1h 20 min", kcal: 300),
-        const SizedBox(height: 6),
-        BuildExerciseItem(title: "Entrenamiento de Fuerza", subtitle: "14 oct - 40 min", kcal: 450),
-      ],
+    // Lista de ejercicios
+    final List<Map<String, dynamic>> ejercicios = ListaEjercicios().exerciseList;
+
+    return ListView.builder(
+      shrinkWrap: true,
+      physics: const NeverScrollableScrollPhysics(),
+      itemCount: ejercicios.length,
+      itemBuilder: (context, index) {
+        final ejercicio = ejercicios[index];
+        return Column(
+          children: [
+            BuildExerciseItem(
+              title: ejercicio["title"],
+              subtitle: ejercicio["subtitle"],
+              kcal: ejercicio["kcal"],
+            ),
+            const SizedBox(height: 6),
+          ],
+        );
+      },
     );
   }
 }

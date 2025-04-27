@@ -1,9 +1,22 @@
 import 'package:flutter/material.dart';
 import 'presentation/views/Sueno/pantalla_sueno.dart';
 import 'presentation/views/actividad/pantalla_ejercicio.dart';
+import 'package:provider/provider.dart';
+import 'package:deepsleep/data/services/procesarDatos.dart';
 
 void main() {
-  runApp(const MiApp());
+  
+  runApp(
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(
+          create: (_) => RitmoCardiacoProvider(),
+        ),
+      ],
+      child: const MiApp(),
+    ),
+  );
+    //const MiApp());
 }
 
 class MiApp extends StatelessWidget {

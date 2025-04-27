@@ -5,6 +5,9 @@ import 'package:deepsleep/presentation/views/actividad/widgets/MetricCard.dart';
 import 'package:deepsleep/presentation/views/actividad/widgets/exerciseItem.dart';
 import 'package:deepsleep/presentation/views/actividad/widgets/encabezado.dart';
 import 'package:deepsleep/presentation/views/actividad/widgets/progreso.dart';
+import 'package:provider/provider.dart';
+import 'package:deepsleep/data/services/procesarDatos.dart';
+import 'dart:async';
 
 class PantallaEjercicio extends StatefulWidget {
   const PantallaEjercicio({super.key});
@@ -14,6 +17,23 @@ class PantallaEjercicio extends StatefulWidget {
 }
 
 class _PantallaEjercicioState extends State<PantallaEjercicio> {
+  @override
+  void initState() {
+    super.initState();
+    _iniciarAutoActualizacion();
+  }
+
+  void _iniciarAutoActualizacion() {
+    Future.doWhile(() async {
+      await Future.delayed(const Duration(seconds: 1));
+      if (!mounted) return false; // Verifica si el widget está montado
+      Provider.of<RitmoCardiacoProvider>(
+        context,
+        listen: false,
+      ).agregarNuevoDato();
+      return true; // Retorna true para continuar el ciclo
+    });
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(

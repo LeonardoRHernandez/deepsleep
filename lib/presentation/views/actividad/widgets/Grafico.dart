@@ -1,9 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
-class BuildGraficoCardiaco extends StatelessWidget {
+import 'package:provider/provider.dart';
+//import 'dart:async';
+import 'package:deepsleep/data/services/procesarDatos.dart';
+import 'package:deepsleep/presentation/controllers/ExerciseController/graficoController.dart';
+class BuildGraficoCardiaco extends StatefulWidget {
   const BuildGraficoCardiaco({
     super.key,
   });
+
+  @override
+  State<BuildGraficoCardiaco> createState() => _BuildGraficoCardiacoState();
+}
+
+class _BuildGraficoCardiacoState extends State<BuildGraficoCardiaco> {
 
   @override
   Widget build(BuildContext context) {
@@ -25,48 +35,49 @@ class BuildGraficoCardiaco extends StatelessWidget {
             child: SizedBox(
               height: 200,
               width: double.infinity,
-              child: LineChart(
-                LineChartData(
-                  titlesData: FlTitlesData(show: false),
-                  gridData: FlGridData(show: false),
-                  borderData: FlBorderData(show: false),
-                  lineBarsData: [
-                    LineChartBarData(
-                      spots: [
-                        FlSpot(0, 72),
-                        FlSpot(1, 75),
-                        FlSpot(2, 78),
-                        FlSpot(3, 76),
-                        FlSpot(4, 80),
-                        FlSpot(5, 85),
-                        FlSpot(6, 78),
-                        FlSpot(7, 90),
-                        FlSpot(8, 87),
-                        FlSpot(9, 100),
+              child: Consumer<RitmoCardiacoProvider>(
+                builder: (context, provider, child) {
+
+                  return LineChart(
+                    LineChartData(
+                      titlesData: FlTitlesData(show: false),
+                      //gridData: FlGridData(show: false),
+                      borderData: FlBorderData(show: false),
+                      lineBarsData: [
+                        LineChartBarData(
+                          spots:list20Graf(provider),
+                          isCurved: true,
+                          color: Colors.redAccent,
+                          barWidth: 3,
+                          dotData: FlDotData(show: false),
+                        ),
                       ],
-                      isCurved: true,
-                      color: Colors.redAccent,
-                      barWidth: 3,
-                      dotData: FlDotData(show: false),
                     ),
-                  ],
-                ),
+                  );
+                }
               ),
             ),
           ),
           const SizedBox(height: 16),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: const [
-              _CardiacoDato(label: "Promedio", value: "75 PPM"),
-              _CardiacoDato(label: "Mínimo", value: "60 PPM"),
-              _CardiacoDato(label: "Máximo", value: "100 PPM"),
-            ],
+          Consumer<RitmoCardiacoProvider>(
+            builder: (context, provider, child) {
+              return Row(
+                
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  _CardiacoDato(label: "Promedio", value: "${provider.promedio.toInt()} PPM"),
+                  _CardiacoDato(label: "Mínimo", value: "${provider.min.toInt()} PPM"),
+                  _CardiacoDato(label: "Máximo", value: "${provider.max.toInt()} PPM"),
+                ],
+              );
+            }
           ),
         ],
       ),
     );
   }
+
+
 }
 
 class _CardiacoDato extends StatelessWidget {
