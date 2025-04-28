@@ -2,7 +2,6 @@ import 'dart:ffi';
 import 'dart:math';
 import 'package:flutter/material.dart';
 import 'dart:async';
-import 'package:deepsleep/data/services/CleintServer.dart';
 import 'package:deepsleep/presentation/controllers/Sleepcontroller/historialSueno.dart';
 
 class RitmoCardiacoProvider with ChangeNotifier {
@@ -40,11 +39,7 @@ class RitmoCardiacoProvider with ChangeNotifier {
     //aqui llamar a la api
     // Simulación de llamada a la API
     int nuevoDato = random.nextInt(10) + 60; // 60-100
-    // final fetcher = DataFetcher(baseUrl: 'http://192.168.1.97:3000');
-
-    // //print('Obteniendo datos del servidor...');
-    // final int heartRate = await fetcher.fetchData();
-    // int nuevoDato = heartRate; //!= null ? int.parse(heartRate) : 0;
+     //!= null ? int.parse(heartRate) : 0;
     // Simula un nuevo dato entre 60 y 100
     // Si el nuevo dato es diferente de 0, lo agrega a la lista
 
@@ -77,3 +72,4 @@ extension ListIntX on List<int> {
   int get min => reduce((a, b) => a < b ? a : b);
   int get max => reduce((a, b) => a > b ? a : b);
 }
+

@@ -1,8 +1,7 @@
-import 'package:flutter/material.dart';
 class ListaEjercicios {
   final List<Map<String, dynamic>> _ejercicios = [//lista de prueba
       {"title": "Cardio Intenso", "subtitle": "15 oct - 1h 20 min", "kcal": 300},
-      {"title": "Entrenamiento de Fuerza", "subtitle": "14 oct - 40 min", "kcal": 450},
+      {"title": "Entrenamiento de Fuerza", "subtitle": "14 oct - 0h 40 min", "kcal": 450},
       // {"title": "Yoga", "subtitle": "13 oct - 30 min", "kcal": 200},
       //{"title": "Caminata", "subtitle": "12 oct - 1h 10 min", "kcal": 250},
       //{"title": "Natación", "subtitle": "11 oct - 50 min", "kcal": 400},

@@ -29,7 +29,7 @@ class BuildEncabezadoFijo extends StatelessWidget {
                 onPressed: () {
                   // Acción para agregar sueño
                 },
-                tooltip: 'Agregar sueño', // Tooltip al dejar presionado
+                tooltip: 'Agregar Actividad', // Tooltip al dejar presionado
               ),
               const SizedBox(width: 8),
               IconButton(

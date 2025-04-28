@@ -104,7 +104,7 @@ void mostrarFormularioDormir(BuildContext context) {
               Provider.of<RitmoCardiacoProvider>(
                 context,
                 listen: false,
-              ).listsueno.agregarSueno(fechaFormateada, 0, data,horaDormir, horaDespertar);
+              ).listsueno.agregarSueno(fechaFormateada, 0, data,horaDormir, horaDespertar,"0");
 
               // Mostrar mensaje de éxito
               ScaffoldMessenger.of(context).showSnackBar(

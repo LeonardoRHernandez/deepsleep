@@ -1,7 +1,5 @@
 import 'package:deepsleep/presentation/controllers/procesarDatos.dart';
-import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
-import 'package:provider/provider.dart';
+
 
 double calcularCaloriasPorMinuto({
   required double hr, // Frecuencia cardíaca
