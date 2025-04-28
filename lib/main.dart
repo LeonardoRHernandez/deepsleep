@@ -39,6 +39,23 @@ class PaginaPrincipal extends StatefulWidget {
 }
 
 class _PaginaPrincipalState extends State<PaginaPrincipal> {
+  @override
+  void initState() {
+    super.initState();
+    _iniciarAutoActualizacion();
+  }
+
+  void _iniciarAutoActualizacion() {
+    Future.doWhile(() async {
+      await Future.delayed(const Duration(seconds: 1));
+      if (!mounted) return false; // Verifica si el widget está montado
+      Provider.of<RitmoCardiacoProvider>(
+        context,
+        listen: false,
+      ).agregarNuevoDato();
+      return true; // Retorna true para continuar el ciclo
+    });
+  }
   int _selectedIndex = 0;
 
   void _onItemTapped(int index) {
