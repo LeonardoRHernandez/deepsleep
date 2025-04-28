@@ -41,23 +41,9 @@ class Controllers with ChangeNotifier {
   }
 
   void agregarNuevoDato() async {
-    //aqui llamar a la api
-    // Simulación de llamada a la API
-    //int nuevoDato = random.nextInt(10) + 60; // 60-100
-     //!= null ? int.parse(heartRate) : 0;
-    // Simula un nuevo dato entre 60 y 100
-    // Si el nuevo dato es diferente de 0, lo agrega a la lista
-    final fetcher = DataFetcher(baseUrl: 'http://192.168.1.156:3000');
-
-
-  //print('Obteniendo datos del servidor...');
-    final  response = await fetcher.fetchData();
-   
-    print('Respuesta del servidor: $response');
-    final int heartRate =response; // ⬅️ Aquí solo extraes heartRate
-
-    int nuevoDato = heartRate;
-    print("Nuevodato=$nuevoDato"); //!= null ? int.parse(heartRate) : 0;
+  
+    int nuevoDato = random.nextInt(10) + 60; // 60-100
+     
 
 
 
