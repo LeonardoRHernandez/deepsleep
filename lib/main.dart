@@ -3,7 +3,7 @@ import 'presentation/views/Sueno/pantalla_sueno.dart';
 import 'presentation/views/actividad/pantalla_ejercicio.dart';
 import 'package:provider/provider.dart';
 import 'package:deepsleep/presentation/controllers/Controllers.dart';
-
+import 'package:deepsleep/presentation/controllers/ExerciseController/ControlerActividad.dart';
 void main() {
   
   runApp(
@@ -52,7 +52,7 @@ class _PaginaPrincipalState extends State<PaginaPrincipal> {
       Provider.of<Controllers>(
         context,
         listen: false,
-      ).agregarNuevoDato();
+      ).actividad.agregarNuevoDato();
       return true; // Retorna true para continuar el ciclo
     });
   }

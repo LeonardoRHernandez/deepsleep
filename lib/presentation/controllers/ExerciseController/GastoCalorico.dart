@@ -46,7 +46,7 @@ double calcularCaloriaTotal(
 
   //double totalCalorias = 0;
   Duration tiempoTotal = fin.difference(inicio);
-  double caloriasPromedio=calcularCaloriasPorMinuto(hr: provider.promedio, pesoKg: 85, edad: 22);
+  double caloriasPromedio=calcularCaloriasPorMinuto(hr: provider.actividad.promedio, pesoKg: 85, edad: 22);
   double caloriasEjercicio = caloriasPromedio * tiempoTotal.inMinutes;
 
   // totalCalorias += caloriasEjercicio1;

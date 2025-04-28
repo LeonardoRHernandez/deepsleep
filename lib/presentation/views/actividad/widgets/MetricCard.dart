@@ -59,7 +59,7 @@ class BuildMetricos extends StatelessWidget {
         const SizedBox(width: 12),
         Expanded(child: Consumer<Controllers>(
           builder: (context,provider, child) {
-            return BuildMetricCard(icon: Icons.favorite, value: "${provider.ritmoCardiaco.toInt()} PPM", label: "Ritmo cardíaco", color: Colors.purple);
+            return BuildMetricCard(icon: Icons.favorite, value: "${provider.actividad.ritmoCardiaco.toInt()} PPM", label: "Ritmo cardíaco", color: Colors.purple);
           }
         )),
       ],

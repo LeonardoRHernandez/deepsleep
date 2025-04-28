@@ -1,70 +1,38 @@
-import 'dart:ffi';
-import 'dart:math';
+
+import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
-import 'package:deepsleep/presentation/controllers/Sleepcontroller/historialSueno.dart';
-import 'package:deepsleep/data/services/CleintServer.dart';// Para hacer la petición HTTP
-
-
-
-
-
+import 'package:deepsleep/presentation/controllers/Sleepcontroller/historialSueno.dart'; // Para hacer la petición HTTP
+import 'package:deepsleep/presentation/controllers/ExerciseController/ControlerActividad.dart';
+import 'package:deepsleep/presentation/controllers/Sleepcontroller/ControlerSueno.dart';
+import 'package:deepsleep/presentation/controllers/ExerciseController/graficoController.dart';
 class Controllers with ChangeNotifier {
-  Listsueno _listsueno = Listsueno();
-  List<int> _datos = [];
-  Timer? _timer;
-  Random random = Random();
-  DateTime _horaInicio = DateTime.now();
-  double _promedio = 0;
-  double _min = 0;
-  double _max = 0;
-  double _ritmoCardiaco = 0;
+  Controllers() {
+    _actividad.addListener(notifyListeners);
+  }
 
-  List<int> get datos => List.unmodifiable(_datos);
-  double get promedio => _promedio;
-  double get min => _min;
-  double get max => _max;
-  double get ritmoCardiaco => _ritmoCardiaco;
+
+  final _sueno = Sueno();
+  Sueno get sueno => _sueno;
+  final _actividad = Actividad();
+  Actividad get actividad => _actividad;
+  final _listsueno = Listsueno();
+  Timer? _timer;
+  final DateTime _horaInicio = DateTime.now();
   DateTime get horaInicio => _horaInicio;
   Listsueno get listsueno => _listsueno;
-
+  final Graficar _graficar = Graficar();
+  List<FlSpot> get list20Graf => _graficar.list20Graf(_actividad.datos);
+  List<FlSpot> get listGraf => _graficar.listGraf(_actividad.datos);
   // Inicia la generación automática de datos
-  void iniciarMonitoreo() {
-    _timer?.cancel(); // Cancela cualquier timer existente
-    _timer = Timer.periodic(const Duration(seconds: 10), (_) {
-      agregarNuevoDato();
-    });
-  }
 
   void detenerMonitoreo() {
     _timer?.cancel();
   }
 
-  void agregarNuevoDato() async {
-  
-    int nuevoDato = random.nextInt(10) + 60; // 60-100
-     
-
-
-
-    if (nuevoDato > 30) {
-      _datos.add(nuevoDato);
-      _ritmoCardiaco = nuevoDato.toDouble();
-      _calcularEstadisticas();
-      notifyListeners();
-    } // Actualiza todos los widgets escuchando
-  }
-
-  void _calcularEstadisticas() {
-    if (_datos.isEmpty) return;
-
-    _promedio = _datos.average;
-    _min = _datos.min.toDouble();
-    _max = _datos.max.toDouble();
-  }
-
   @override
   void dispose() {
+    _actividad.removeListener(notifyListeners);
     _timer?.cancel();
     super.dispose();
   }
@@ -76,4 +44,3 @@ extension ListIntX on List<int> {
   int get min => reduce((a, b) => a < b ? a : b);
   int get max => reduce((a, b) => a > b ? a : b);
 }
-
