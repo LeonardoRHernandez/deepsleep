@@ -6,7 +6,7 @@ import 'package:deepsleep/presentation/views/actividad/widgets/exerciseItem.dart
 import 'package:deepsleep/presentation/views/actividad/widgets/encabezado.dart';
 import 'package:deepsleep/presentation/views/actividad/widgets/progreso.dart';
 import 'package:provider/provider.dart';
-import 'package:deepsleep/data/services/procesarDatos.dart';
+import 'package:deepsleep/presentation/controllers/procesarDatos.dart';
 import 'dart:async';
 
 class PantallaEjercicio extends StatefulWidget {

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:provider/provider.dart';
 //import 'dart:async';
-import 'package:deepsleep/data/services/procesarDatos.dart';
+import 'package:deepsleep/presentation/controllers/procesarDatos.dart';
 import 'package:deepsleep/presentation/controllers/ExerciseController/graficoController.dart';
 class BuildGraficoCardiaco extends StatefulWidget {
   const BuildGraficoCardiaco({

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'presentation/views/Sueno/pantalla_sueno.dart';
 import 'presentation/views/actividad/pantalla_ejercicio.dart';
 import 'package:provider/provider.dart';
-import 'package:deepsleep/data/services/procesarDatos.dart';
+import 'package:deepsleep/presentation/controllers/procesarDatos.dart';
 
 void main() {
   

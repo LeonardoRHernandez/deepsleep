@@ -1,5 +1,5 @@
 import 'package:fl_chart/fl_chart.dart';
-import 'package:deepsleep/data/services/procesarDatos.dart';
+import 'package:deepsleep/presentation/controllers/procesarDatos.dart';
 List<FlSpot> list20Graf(RitmoCardiacoProvider provider) {
   return provider.datos
                                   .sublist(
