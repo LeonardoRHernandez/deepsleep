@@ -3,7 +3,10 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'dart:async';
 import 'package:deepsleep/presentation/controllers/Sleepcontroller/historialSueno.dart';
-
+import 'package:deepsleep/data/services/CleintServer.dart';
+import 'package:http/http.dart';
+import 'dart:convert'; // Para jsonDecode
+import 'package:http/http.dart' as http; // Para hacer la petición HTTP
 class RitmoCardiacoProvider with ChangeNotifier {
   Listsueno _listsueno = Listsueno();
   List<int> _datos = [];
@@ -38,12 +41,25 @@ class RitmoCardiacoProvider with ChangeNotifier {
   void agregarNuevoDato() async {
     //aqui llamar a la api
     // Simulación de llamada a la API
-    int nuevoDato = random.nextInt(10) + 60; // 60-100
+    //int nuevoDato = random.nextInt(10) + 60; // 60-100
      //!= null ? int.parse(heartRate) : 0;
     // Simula un nuevo dato entre 60 y 100
     // Si el nuevo dato es diferente de 0, lo agrega a la lista
+    final fetcher = DataFetcher(baseUrl: 'http://192.168.1.156:3000');
 
-    if (nuevoDato != 0) {
+
+  //print('Obteniendo datos del servidor...');
+    final  response = await fetcher.fetchData();
+   
+    print('Respuesta del servidor: $response');
+    final int heartRate =response; // ⬅️ Aquí solo extraes heartRate
+
+    int nuevoDato = heartRate;
+    print("Nuevodato=$nuevoDato"); //!= null ? int.parse(heartRate) : 0;
+
+
+
+    if (nuevoDato > 30) {
       _datos.add(nuevoDato);
       _ritmoCardiaco = nuevoDato.toDouble();
       _calcularEstadisticas();

@@ -20,7 +20,7 @@ class DataFetcher {
         if (data.containsKey('heartRate') && data.containsKey('steps')) {
           print('Heart Rate: ${data['heartRate']}');
           print('Steps: ${data['steps']}');
-          return int.parse(data['heartRate']);
+           return (data['heartRate'] as num).toInt(); // Retorna la frecuencia cardíaca o 0 si no está presente
         } else {
           print('Error: Respuesta no contiene los datos esperados.');
           return 0;
@@ -32,7 +32,7 @@ class DataFetcher {
       }
     } catch (e) {
       // Manejo de excepciones (por ejemplo, problemas de red)
-      //print('Excepción al obtener los datos: $e');
+      print('Excepción al obtener los datos: $e');
       return 0;
     }
   }
