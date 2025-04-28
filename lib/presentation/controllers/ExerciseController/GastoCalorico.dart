@@ -1,4 +1,4 @@
-import 'package:deepsleep/presentation/controllers/procesarDatos.dart';
+import 'package:deepsleep/presentation/controllers/Controllers.dart';
 
 
 double calcularCaloriasPorMinuto({
@@ -38,7 +38,7 @@ double calcularCaloriasPorDia({
 double calcularCaloriaTotal(
   DateTime inicio,
   DateTime fin,
-  RitmoCardiacoProvider provider,
+  Controllers provider,
 ) {
   // Aquí puedes implementar la lógica para calcular la cantidad total de calorías
   // quemadas en un día, sumando las calorías de cada ejercicio.

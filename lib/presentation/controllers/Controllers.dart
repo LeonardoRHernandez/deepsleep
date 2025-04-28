@@ -3,11 +3,13 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'dart:async';
 import 'package:deepsleep/presentation/controllers/Sleepcontroller/historialSueno.dart';
-import 'package:deepsleep/data/services/CleintServer.dart';
-import 'package:http/http.dart';
-import 'dart:convert'; // Para jsonDecode
-import 'package:http/http.dart' as http; // Para hacer la petición HTTP
-class RitmoCardiacoProvider with ChangeNotifier {
+import 'package:deepsleep/data/services/CleintServer.dart';// Para hacer la petición HTTP
+
+
+
+
+
+class Controllers with ChangeNotifier {
   Listsueno _listsueno = Listsueno();
   List<int> _datos = [];
   Timer? _timer;

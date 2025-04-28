@@ -1,4 +1,4 @@
-import 'package:deepsleep/presentation/controllers/procesarDatos.dart';
+import 'package:deepsleep/presentation/controllers/Controllers.dart';
 import 'package:deepsleep/presentation/controllers/ExerciseController/GastoCalorico.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -48,7 +48,7 @@ class BuildMetricos extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       children: [
-        Expanded(child: Consumer<RitmoCardiacoProvider>(
+        Expanded(child: Consumer<Controllers>(
           builder: (context,provider, child) {
             double calorias=0;
             
@@ -57,7 +57,7 @@ class BuildMetricos extends StatelessWidget {
           }
         )),
         const SizedBox(width: 12),
-        Expanded(child: Consumer<RitmoCardiacoProvider>(
+        Expanded(child: Consumer<Controllers>(
           builder: (context,provider, child) {
             return BuildMetricCard(icon: Icons.favorite, value: "${provider.ritmoCardiaco.toInt()} PPM", label: "Ritmo cardíaco", color: Colors.purple);
           }

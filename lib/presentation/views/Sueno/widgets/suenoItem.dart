@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:deepsleep/presentation/controllers/procesarDatos.dart';
+import 'package:deepsleep/presentation/controllers/Controllers.dart';
 class BuildsuenoItem extends StatelessWidget {
   const BuildsuenoItem({
     super.key,
@@ -41,7 +41,7 @@ class BuildListaSueno extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // Lista de ejercicios
-    var Lissuenos = Provider.of<RitmoCardiacoProvider>(context).listsueno;
+    var Lissuenos = Provider.of<Controllers>(context).listsueno;
     final List<Map<String, dynamic>> suenos = Lissuenos.historialSueno;
 
     return ListView.builder(

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:provider/provider.dart';
 //import 'dart:async';
-import 'package:deepsleep/presentation/controllers/procesarDatos.dart';
+import 'package:deepsleep/presentation/controllers/Controllers.dart';
 import 'package:deepsleep/presentation/controllers/ExerciseController/graficoController.dart';
 class BuildGraficoCardiaco extends StatefulWidget {
   const BuildGraficoCardiaco({
@@ -35,7 +35,7 @@ class _BuildGraficoCardiacoState extends State<BuildGraficoCardiaco> {
             child: SizedBox(
               height: 200,
               width: double.infinity,
-              child: Consumer<RitmoCardiacoProvider>(
+              child: Consumer<Controllers>(
                 builder: (context, provider, child) {
 
                   return LineChart(
@@ -59,7 +59,7 @@ class _BuildGraficoCardiacoState extends State<BuildGraficoCardiaco> {
             ),
           ),
           const SizedBox(height: 16),
-          Consumer<RitmoCardiacoProvider>(
+          Consumer<Controllers>(
             builder: (context, provider, child) {
               return Row(
                 

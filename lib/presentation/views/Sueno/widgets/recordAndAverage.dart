@@ -1,4 +1,4 @@
-import 'package:deepsleep/presentation/controllers/procesarDatos.dart';
+import 'package:deepsleep/presentation/controllers/Controllers.dart';
 import 'package:flutter/material.dart';
 import 'package:deepsleep/presentation/views/Sueno/widgets/statCard.dart';
 import 'package:provider/provider.dart';
@@ -9,7 +9,7 @@ class BuildRecordAndAverage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     //String tiempoMaximo=calcularTiempoMaximo(provider.listsueno.historialSueno);
-    var provider = Provider.of<RitmoCardiacoProvider>(context);
+    var provider = Provider.of<Controllers>(context);
     String tiempoMaximo = calcularTiempoMaximo(
       provider.listsueno.historialSueno,
     );

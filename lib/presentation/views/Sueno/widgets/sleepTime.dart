@@ -1,4 +1,4 @@
-import 'package:deepsleep/presentation/controllers/procesarDatos.dart';
+import 'package:deepsleep/presentation/controllers/Controllers.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 class BuildSleepTime extends StatelessWidget {
@@ -26,7 +26,7 @@ class BuildSleepTime extends StatelessWidget {
             height: 150,
             decoration: const BoxDecoration(color: Colors.black, shape: BoxShape.circle),
             alignment: Alignment.center,
-            child: Consumer<RitmoCardiacoProvider>(
+            child: Consumer<Controllers>(
               builder: (context,provider, child) {
                 var tiempo = provider.listsueno.historialSueno[provider.listsueno.historialSueno.length - 1]['data'];
                 return Column(

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:deepsleep/presentation/controllers/procesarDatos.dart';
+import 'package:deepsleep/presentation/controllers/Controllers.dart';
 import 'package:deepsleep/presentation/controllers/ExerciseController/historialExercice.dart';
 class ProgresoWidget extends StatefulWidget {
   const ProgresoWidget({super.key});

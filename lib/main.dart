@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'presentation/views/Sueno/pantalla_sueno.dart';
 import 'presentation/views/actividad/pantalla_ejercicio.dart';
 import 'package:provider/provider.dart';
-import 'package:deepsleep/presentation/controllers/procesarDatos.dart';
+import 'package:deepsleep/presentation/controllers/Controllers.dart';
 
 void main() {
   
@@ -10,7 +10,7 @@ void main() {
     MultiProvider(
       providers: [
         ChangeNotifierProvider(
-          create: (_) => RitmoCardiacoProvider(),
+          create: (_) => Controllers(),
         ),
       ],
       child: const MiApp(),
@@ -49,7 +49,7 @@ class _PaginaPrincipalState extends State<PaginaPrincipal> {
     Future.doWhile(() async {
       await Future.delayed(const Duration(seconds: 1));
       if (!mounted) return false; // Verifica si el widget está montado
-      Provider.of<RitmoCardiacoProvider>(
+      Provider.of<Controllers>(
         context,
         listen: false,
       ).agregarNuevoDato();

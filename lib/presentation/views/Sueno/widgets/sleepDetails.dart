@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:deepsleep/presentation/controllers/procesarDatos.dart';
+import 'package:deepsleep/presentation/controllers/Controllers.dart';
 
 class BuildSleepDetails extends StatelessWidget {
   const BuildSleepDetails({super.key});
 
   @override
   Widget build(BuildContext context) {
-    var provider = Provider.of<RitmoCardiacoProvider>(context);
+    var provider = Provider.of<Controllers>(context);
     var sleepDatalast =
         provider
             .listsueno

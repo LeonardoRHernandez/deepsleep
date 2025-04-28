@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:deepsleep/presentation/controllers/procesarDatos.dart';
+import 'package:deepsleep/presentation/controllers/Controllers.dart';
 
 class BuildEncabezadoFijo extends StatelessWidget {
   const BuildEncabezadoFijo({
@@ -101,7 +101,7 @@ void mostrarFormularioDormir(BuildContext context) {
               String fechaFormateada =
                   "${hoy.year}-${hoy.month.toString().padLeft(2, '0')}-${hoy.day.toString().padLeft(2, '0')}";
 
-              Provider.of<RitmoCardiacoProvider>(
+              Provider.of<Controllers>(
                 context,
                 listen: false,
               ).listsueno.agregarSueno(fechaFormateada, 0, data,horaDormir, horaDespertar,"0");
