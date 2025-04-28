@@ -37,3 +37,12 @@ class DataFetcher {
     }
   }
 }
+
+void main() async {
+  final fetcher = DataFetcher(baseUrl: 'http://192.168.1.97:3000');
+
+  //print('Obteniendo datos del servidor...');
+  final int heartRate = await fetcher.fetchData();
+  int nuevoDato = heartRate;
+  print("$nuevoDato"); //!= null ? int.parse(heartRate) : 0;
+}
