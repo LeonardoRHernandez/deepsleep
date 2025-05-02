@@ -1,10 +1,9 @@
 import 'package:deepsleep/presentation/controllers/Controllers.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+
 class BuildSleepTime extends StatelessWidget {
-  const BuildSleepTime({
-    super.key,
-  });
+  const BuildSleepTime({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -24,20 +23,45 @@ class BuildSleepTime extends StatelessWidget {
           Container(
             width: 150,
             height: 150,
-            decoration: const BoxDecoration(color: Colors.black, shape: BoxShape.circle),
+            decoration: const BoxDecoration(
+              color: Colors.black,
+              shape: BoxShape.circle,
+            ),
             alignment: Alignment.center,
             child: Consumer<Controllers>(
-              builder: (context,provider, child) {
-                var tiempo = provider.listsueno.historialSueno[provider.listsueno.historialSueno.length - 1]['data'];
+              builder: (context, provider, child) {
+                var tiempo =
+                    provider
+                        .listsueno
+                        .historialSueno[provider
+                                .listsueno
+                                .historialSueno
+                                .length -
+                            1]
+                        .duracion;
                 return Column(
                   mainAxisAlignment: MainAxisAlignment.center,
-                  children:[
-                    Text("$tiempo", style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold, color: Colors.white)),
+                  children: [
+                    Text(
+                      "$tiempo",
+                      style: TextStyle(
+                        fontSize: 22,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
+                      ),
+                    ),
                     SizedBox(height: 10),
-                    Text('Tiempo total', style: TextStyle(fontSize: 11, fontWeight: FontWeight.bold, color: Colors.white)),
+                    Text(
+                      'Tiempo total',
+                      style: TextStyle(
+                        fontSize: 11,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
+                      ),
+                    ),
                   ],
                 );
-              }
+              },
             ),
           ),
           const SizedBox(height: 16),
@@ -55,7 +79,3 @@ class BuildSleepTime extends StatelessWidget {
     );
   }
 }
-
-
-
-

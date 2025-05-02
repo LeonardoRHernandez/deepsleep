@@ -12,8 +12,8 @@ class BuildSleepDetails extends StatelessWidget {
         provider
             .listsueno
             .historialSueno[provider.listsueno.historialSueno.length - 1];
-    var eficiencia = sleepDatalast["eficiencia"];
-    if (eficiencia == "0"){
+    var eficiencia = sleepDatalast.eficiencia;
+    if (eficiencia == "0") {
       eficiencia = "XXX";
     } else {
       eficiencia = "${eficiencia}%";
@@ -24,18 +24,14 @@ class BuildSleepDetails extends StatelessWidget {
         BuildDetailCard(
           icon: '🕒',
           label: 'Inicio',
-          value: '${sleepDatalast["horaInicio"]}',
+          value: '${sleepDatalast.horaInicio}',
         ),
         BuildDetailCard(
           icon: '⏰',
           label: 'Fin',
-          value: '${sleepDatalast["horaFinal"]}',
+          value: '${sleepDatalast.horaFinal}',
         ),
-        BuildDetailCard(
-          icon: '💤',
-          label: 'Eficiencia',
-          value:'$eficiencia',
-        ),
+        BuildDetailCard(icon: '💤', label: 'Eficiencia', value: '$eficiencia'),
       ],
     );
   }

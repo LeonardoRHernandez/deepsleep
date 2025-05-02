@@ -35,7 +35,7 @@ class _BuildGraficoCardiacoState extends State<BuildGraficoCardiaco> {
               width: double.infinity,
               child: Consumer<Controllers>(
                 builder: (context, provider, child) {
-                  print(provider.listGraf);
+                  //print(provider.listGraf);
                   return LineChart(
                     LineChartData(
                       titlesData: FlTitlesData(show: false),
@@ -44,7 +44,7 @@ class _BuildGraficoCardiacoState extends State<BuildGraficoCardiaco> {
                       lineBarsData: [
                         LineChartBarData(
                           spots: provider.listGraf,
-                          
+
                           isCurved: true,
                           color: Colors.redAccent,
                           barWidth: 3,

@@ -1,7 +1,9 @@
 import 'package:deepsleep/presentation/controllers/Controllers.dart';
+import 'package:deepsleep/presentation/controllers/Sleepcontroller/ControlerSueno.dart';
 import 'package:flutter/material.dart';
 import 'package:deepsleep/presentation/views/Sueno/widgets/statCard.dart';
 import 'package:provider/provider.dart';
+import 'package:deepsleep/presentation/controllers/Sleepcontroller/historialSueno.dart';
 
 class BuildRecordAndAverage extends StatelessWidget {
   const BuildRecordAndAverage({super.key});
@@ -16,8 +18,10 @@ class BuildRecordAndAverage extends StatelessWidget {
     List<String> partes = tiempoMaximo.split('|');
     String tiempo = partes[0]; // Tiempo máximo
     String fecha = partes[1]; // Fecha asociada al tiempo máximo
-    
-    String Promedio7Dias = calcularPromedioUltimos7Dias(provider.listsueno.historialSueno);
+
+    String Promedio7Dias = calcularPromedioUltimos7Dias(
+      provider.listsueno.historialSueno,
+    );
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [
@@ -38,15 +42,15 @@ class BuildRecordAndAverage extends StatelessWidget {
   }
 }
 
-String calcularTiempoMaximo(List<Map<String, dynamic>> historialSueno) {
+String calcularTiempoMaximo(List<Sueno> historialSueno) {
   String tiempoMaximo = '';
   String fechaMaxima = '';
   int maxHoras = 0;
   int maxMinutos = 0;
 
   for (var sueno in historialSueno) {
-    String tiempo = sueno['data']; // Ejemplo: "7h 42m"
-    String fecha = sueno['data2']; // Fecha asociada al sueño
+    String tiempo = sueno.duracion; // Ejemplo: "7h 42m"
+    String fecha = sueno.fecha; // Fecha asociada al sueño
 
     // Divide el tiempo en horas y minutos
     List<String> partes = tiempo.split('h');
@@ -64,14 +68,15 @@ String calcularTiempoMaximo(List<Map<String, dynamic>> historialSueno) {
 
   return "$tiempoMaximo|$fechaMaxima"; // Retorna ambos valores separados por un delimitador
 }
-String calcularPromedioUltimos7Dias(List<Map<String, dynamic>> historialSueno) {
+
+String calcularPromedioUltimos7Dias(List<Sueno> historialSueno) {
   int totalHoras = 0;
   int totalMinutos = 0;
   int diasContados = 0;
 
   // Itera sobre los últimos 7 elementos del historial
   for (var i = historialSueno.length - 1; i >= 0 && diasContados < 7; i--) {
-    String tiempo = historialSueno[i]['data']; // Ejemplo: "7h 42m"
+    String tiempo = historialSueno[i].duracion; // Ejemplo: "7h 42m"
 
     // Divide el tiempo en horas y minutos
     List<String> partes = tiempo.split('h');

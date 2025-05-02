@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:deepsleep/presentation/controllers/Controllers.dart';
+import 'package:deepsleep/presentation/controllers/Sleepcontroller/ControlerSueno.dart';
 
 class BuildEncabezadoFijo extends StatelessWidget {
   const BuildEncabezadoFijo({
@@ -103,8 +104,18 @@ void mostrarFormularioDormir(BuildContext context) {
 
               Provider.of<Controllers>(
                 context,
-                listen: false,
-              ).listsueno.agregarSueno(fechaFormateada, 0, data,horaDormir, horaDespertar,"0");
+                listen:
+                    false, //asignar estos valorees a un objeto de la clase Sueno
+              ).listsueno.agregarSueno(
+                Sueno(
+                  fechaFormateada,
+                  5,
+                  data,
+                  horaDormir,
+                  horaDespertar,
+                  "70",
+                ),
+              );
 
               // Mostrar mensaje de éxito
               ScaffoldMessenger.of(context).showSnackBar(

@@ -1,4 +1,3 @@
-
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
@@ -6,21 +5,21 @@ import 'package:deepsleep/presentation/controllers/Sleepcontroller/historialSuen
 import 'package:deepsleep/presentation/controllers/ExerciseController/ControlerActividad.dart';
 import 'package:deepsleep/presentation/controllers/Sleepcontroller/ControlerSueno.dart';
 import 'package:deepsleep/presentation/controllers/ExerciseController/graficoController.dart';
+
 class Controllers with ChangeNotifier {
   Controllers() {
     _actividad.addListener(notifyListeners);
   }
 
-
-  final _sueno = Sueno();
+  final _sueno = Sueno.empty();
   Sueno get sueno => _sueno;
   final _actividad = Actividad();
   Actividad get actividad => _actividad;
-  final _listsueno = Listsueno();
+  final _listsueno = ListSueno();
   Timer? _timer;
   final DateTime _horaInicio = DateTime.now();
   DateTime get horaInicio => _horaInicio;
-  Listsueno get listsueno => _listsueno;
+  ListSueno get listsueno => _listsueno;
   final Graficar _graficar = Graficar();
   List<FlSpot> get list20Graf => _graficar.list20Graf(_actividad.datos);
   List<FlSpot> get listGraf => _graficar.listGraf(_actividad.datos);
