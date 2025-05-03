@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'presentation/views/Sueno/pantalla_sueno.dart';
 import 'presentation/views/actividad/pantalla_ejercicio.dart';
+import 'presentation/views/ajustes/pantalla_ajustes.dart';
 import 'package:provider/provider.dart';
 import 'package:deepsleep/presentation/controllers/Controllers.dart';
 import 'package:deepsleep/presentation/controllers/ExerciseController/ControlerActividad.dart';
+
 void main() {
-  
+
   runApp(
     MultiProvider(
       providers: [
@@ -16,7 +18,7 @@ void main() {
       child: const MiApp(),
     ),
   );
-    //const MiApp());
+
 }
 
 class MiApp extends StatelessWidget {
@@ -64,6 +66,12 @@ class _PaginaPrincipalState extends State<PaginaPrincipal> {
     });
   }
 
+  static const List<Widget> _pantallas = <Widget>[
+    PantallaSueno(),
+    PantallaAjustes(),
+    PantallaEjercicio(),
+  ];
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -71,7 +79,7 @@ class _PaginaPrincipalState extends State<PaginaPrincipal> {
         title: const Text("Deep Sleep"),
         backgroundColor: Colors.blueAccent,
       ),
-      body: _selectedIndex == 0 ? const PantallaSueno() : const PantallaEjercicio(),
+      body: _pantallas[_selectedIndex],
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _selectedIndex,
         onTap: _onItemTapped,
@@ -79,6 +87,10 @@ class _PaginaPrincipalState extends State<PaginaPrincipal> {
           BottomNavigationBarItem(
             icon: Icon(Icons.bedtime),
             label: 'Sueño',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.person),
+            label: 'Ajustes',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.fitness_center),
