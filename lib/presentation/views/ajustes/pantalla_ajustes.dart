@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class PantallaAjustes extends StatefulWidget {
-  final VoidCallback desbloquearPantallas;
+  final void Function({bool redirigirASueno}) desbloquearPantallas;
 
   const PantallaAjustes({Key? key, required this.desbloquearPantallas}) : super(key: key);
 
@@ -38,6 +38,11 @@ class _PantallaAjustesState extends State<PantallaAjustes> {
         _estatura = prefs.getString('estatura') ?? '';
         _edad = prefs.getString('edad') ?? '';
       });
+
+      // Llamar al callback en el siguiente frame
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      widget.desbloquearPantallas(redirigirASueno: false);
+    });
     }
   }
 
@@ -47,7 +52,7 @@ class _PantallaAjustesState extends State<PantallaAjustes> {
       barrierDismissible: false,
       builder: (_) {
         return AlertDialog(
-          title: Text('Configuración Inicial'),
+          title: const Text('Configuración Inicial'),
           content: Form(
             key: _formKey,
             child: SingleChildScrollView(
@@ -55,24 +60,21 @@ class _PantallaAjustesState extends State<PantallaAjustes> {
                 children: [
                   TextFormField(
                     controller: _pesoController,
-                    decoration: InputDecoration(labelText: 'Peso (kg)'),
+                    decoration: const InputDecoration(labelText: 'Peso (kg)'),
                     keyboardType: TextInputType.number,
-                    validator: (value) =>
-                        value == null || value.isEmpty ? 'Ingrese su peso' : null,
+                    validator: (value) => value == null || value.isEmpty ? 'Ingrese su peso' : null,
                   ),
                   TextFormField(
                     controller: _estaturaController,
-                    decoration: InputDecoration(labelText: 'Estatura (cm)'),
+                    decoration: const InputDecoration(labelText: 'Estatura (cm)'),
                     keyboardType: TextInputType.number,
-                    validator: (value) =>
-                        value == null || value.isEmpty ? 'Ingrese su estatura' : null,
+                    validator: (value) => value == null || value.isEmpty ? 'Ingrese su estatura' : null,
                   ),
                   TextFormField(
                     controller: _edadController,
-                    decoration: InputDecoration(labelText: 'Edad'),
+                    decoration: const InputDecoration(labelText: 'Edad'),
                     keyboardType: TextInputType.number,
-                    validator: (value) =>
-                        value == null || value.isEmpty ? 'Ingrese su edad' : null,
+                    validator: (value) => value == null || value.isEmpty ? 'Ingrese su edad' : null,
                   ),
                 ],
               ),
@@ -80,11 +82,9 @@ class _PantallaAjustesState extends State<PantallaAjustes> {
           ),
           actions: [
             ElevatedButton(
-              child: Text('Guardar y Continuar'),
               onPressed: () async {
                 if (_formKey.currentState!.validate()) {
                   final prefs = await SharedPreferences.getInstance();
-
                   await prefs.setBool('formularioCompletado', true);
                   await prefs.setString('peso', _pesoController.text);
                   await prefs.setString('estatura', _estaturaController.text);
@@ -101,11 +101,19 @@ class _PantallaAjustesState extends State<PantallaAjustes> {
                   Navigator.of(context).pop();
                 }
               },
+              child: const Text('Guardar y Continuar'),
             ),
           ],
         );
       },
     );
+  }
+
+  void _editarDatos() {
+    _pesoController.text = _peso;
+    _estaturaController.text = _estatura;
+    _edadController.text = _edad;
+    _mostrarFormularioInicial();
   }
 
   @override
@@ -114,24 +122,69 @@ class _PantallaAjustesState extends State<PantallaAjustes> {
       return const Center(child: CircularProgressIndicator());
     }
 
+    return SafeArea(
+      child: SingleChildScrollView(
+        padding: const EdgeInsets.all(20),
+        child: Column(
+          children: [
+            Card(
+              elevation: 4,
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+              child: Padding(
+                padding: const EdgeInsets.symmetric(vertical: 24, horizontal: 16),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text("Mis datos", style: Theme.of(context).textTheme.titleLarge),
+                    const SizedBox(height: 16),
+                    _buildDato("Peso", "$_peso kg"),
+                    _buildDato("Estatura", "$_estatura cm"),
+                    _buildDato("Edad", "$_edad años"),
+                    const SizedBox(height: 20),
+                    ElevatedButton.icon(
+                      onPressed: _editarDatos,
+                      icon: const Icon(Icons.edit),
+                      label: const Text("Editar datos"),
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.orangeAccent,
+                        foregroundColor: Colors.white,
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            const SizedBox(height: 40),
+            ElevatedButton.icon(
+              onPressed: () {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(content: Text("Bluetooth no implementado aún")),
+                );
+              },
+              icon: const Icon(Icons.bluetooth),
+              label: const Text("Bluetooth"),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.blueAccent,
+                foregroundColor: Colors.white,
+                padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 14),
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildDato(String titulo, String valor) {
     return Padding(
-      padding: const EdgeInsets.all(16.0),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+      padding: const EdgeInsets.symmetric(vertical: 6),
+      child: Row(
         children: [
-          Text("Peso: $_peso kg", style: TextStyle(fontSize: 18)),
-          Text("Estatura: $_estatura cm", style: TextStyle(fontSize: 18)),
-          Text("Edad: $_edad años", style: TextStyle(fontSize: 18)),
-          const SizedBox(height: 24),
-          ElevatedButton.icon(
-            onPressed: () {
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(content: Text("Bluetooth no implementado aún")),
-              );
-            },
-            icon: Icon(Icons.bluetooth),
-            label: Text("Bluetooth"),
-          ),
+          Text("$titulo: ",
+              style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
+          Text(valor, style: const TextStyle(fontSize: 16)),
         ],
       ),
     );

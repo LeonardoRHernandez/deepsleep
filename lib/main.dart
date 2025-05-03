@@ -71,11 +71,13 @@ class _PaginaPrincipalState extends State<PaginaPrincipal> {
     });
   }
 
-   void _desbloquearPantallas() {
+  void _desbloquearPantallas({bool redirigirASueno = true}) {
     setState(() {
-      _isUnlocked = true; 
-      _isFirstTimeAjustes = false; 
-      _selectedIndex = 0; 
+      _isUnlocked = true;
+      _isFirstTimeAjustes = false;
+      if (redirigirASueno) {
+        _selectedIndex = 0;
+      }
     });
   }
 
