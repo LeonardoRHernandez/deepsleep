@@ -58,7 +58,9 @@ class _PaginaPrincipalState extends State<PaginaPrincipal> {
       return true; // Retorna true para continuar el ciclo
     });
   }
-  int _selectedIndex = 0;
+  int _selectedIndex = 1;
+  bool _isFirstTimeAjustes = true; 
+  bool _isUnlocked = false; 
 
   void _onItemTapped(int index) {
     setState(() {
@@ -66,30 +68,45 @@ class _PaginaPrincipalState extends State<PaginaPrincipal> {
     });
   }
 
-  static const List<Widget> _pantallas = <Widget>[
-    PantallaSueno(),
-    PantallaAjustes(),
-    PantallaEjercicio(),
-  ];
+   void _desbloquearPantallas() {
+    setState(() {
+      _isUnlocked = true; 
+      _isFirstTimeAjustes = false; 
+      _selectedIndex = 0; 
+    });
+  }
 
   @override
-  Widget build(BuildContext context) {
+    Widget build(BuildContext context) {
+    final List<Widget> pantallas = <Widget>[
+      PantallaSueno(),
+      PantallaAjustes(desbloquearPantallas: _desbloquearPantallas), // Pasar la función aquí
+      PantallaEjercicio(),
+    ];
+
     return Scaffold(
       appBar: AppBar(
         title: const Text("Deep Sleep"),
         backgroundColor: Colors.blueAccent,
       ),
-      body: _pantallas[_selectedIndex],
+      body: pantallas[_selectedIndex],
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _selectedIndex,
-        onTap: _onItemTapped,
-        items: const [
+        onTap: (index) {
+          if (_isUnlocked || index == 1) { 
+            _onItemTapped(index);
+          }
+        },
+        items: [
           BottomNavigationBarItem(
             icon: Icon(Icons.bedtime),
             label: 'Sueño',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.person),
+            icon: Icon(
+              Icons.person,
+              color: _isFirstTimeAjustes && !_isUnlocked ? Colors.red : Colors.green,
+            ),
             label: 'Ajustes',
           ),
           BottomNavigationBarItem(

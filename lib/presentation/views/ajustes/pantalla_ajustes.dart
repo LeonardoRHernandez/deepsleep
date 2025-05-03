@@ -1,15 +1,26 @@
 import 'package:flutter/material.dart';
 
 class PantallaAjustes extends StatelessWidget {
-  const PantallaAjustes({super.key});
+  final VoidCallback desbloquearPantallas;
+
+  const PantallaAjustes({super.key, required this.desbloquearPantallas});
 
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text("Ajustes"),
+        backgroundColor: Colors.blueAccent,
+      ),
       body: Center(
-        child: Text(
-          'Estás en ajustes',
-          style: TextStyle(fontSize: 24),
+        child: ElevatedButton(
+          onPressed: () {
+            desbloquearPantallas();  // Llama a la función que desbloquea los botones
+          },
+          child: const Text(
+            'Desbloquear Sueño y Ejercicio',
+            style: TextStyle(fontSize: 18),
+          ),
         ),
       ),
     );
