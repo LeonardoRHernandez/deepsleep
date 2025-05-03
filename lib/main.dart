@@ -7,7 +7,7 @@ import 'package:deepsleep/presentation/controllers/Controllers.dart';
 import 'package:deepsleep/presentation/controllers/ExerciseController/ControlerActividad.dart';
 
 void main() {
-
+  WidgetsFlutterBinding.ensureInitialized();
   runApp(
     MultiProvider(
       providers: [
