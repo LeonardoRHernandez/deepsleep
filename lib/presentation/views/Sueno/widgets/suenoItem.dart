@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:deepsleep/presentation/controllers/Controllers.dart';
-import 'package:deepsleep/presentation/controllers/Sleepcontroller/ControlerSueno.dart';
+import 'package:hive_flutter/hive_flutter.dart';
+import 'package:deepsleep/data/models/suenoModel.dart';
 
 class BuildsuenoItem extends StatelessWidget {
   const BuildsuenoItem({
@@ -41,37 +40,39 @@ class BuildsuenoItem extends StatelessWidget {
 }
 
 class BuildListaSueno extends StatelessWidget {
-  BuildListaSueno({super.key});
-  //var exerciseList= ListaEjercicios().exerciseList;
+  const BuildListaSueno({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
-    // Lista de ejercicios
-    var Lissuenos =
-        Provider.of<Controllers>(context).listsueno; //lista de sueños
-    final List<Sueno> suenos = Lissuenos.historialSueno;
-    //final List<Map<String, dynamic>> suenosMap = Lissuenos.historialSueno;
+    return ValueListenableBuilder(
+      valueListenable:
+          Hive.box<Sueno>(
+            'suenoBox',
+          ).listenable(), // Escucha cambios en la caja
+      builder: (context, Box<Sueno> box, _) {
+        final suenos = box.values.toList();
 
-    return ListView.builder(
-      shrinkWrap: true,
-      physics: const NeverScrollableScrollPhysics(),
-      itemCount: suenos.length,
-      itemBuilder: (context, index) {
-        final sueno =
-            suenos[suenos.length -
-                1 -
-                index]; // Acceder al sueño en orden inverso
+        if (suenos.isEmpty) {
+          return const Padding(
+            padding: EdgeInsets.all(16.0),
+            child: Text("No hay sueños guardados aún."),
+          );
+        }
+
         return Column(
-          children: [
-            BuildsuenoItem(
-              // data: sueno['data'],
-              // cantidadEstrellas: sueno['cantidadEstrellas'],
-              // data2: sueno['data2'],
-              data: sueno.duracion,
-              cantidadEstrellas: sueno.estrellas,
-              data2: sueno.fecha,
-            ),
-            const SizedBox(height: 6),
-          ],
+          children:
+              suenos.reversed.map((sueno) {
+                return Column(
+                  children: [
+                    BuildsuenoItem(
+                      data: sueno.duracion,
+                      cantidadEstrellas: sueno.estrellas,
+                      data2: sueno.fecha,
+                    ),
+                    const SizedBox(height: 6),
+                  ],
+                );
+              }).toList(),
         );
       },
     );

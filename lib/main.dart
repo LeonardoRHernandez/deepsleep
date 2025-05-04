@@ -3,20 +3,23 @@ import 'presentation/views/Sueno/pantalla_sueno.dart';
 import 'presentation/views/actividad/pantalla_ejercicio.dart';
 import 'package:provider/provider.dart';
 import 'package:deepsleep/presentation/controllers/Controllers.dart';
-import 'package:deepsleep/presentation/controllers/ExerciseController/ControlerActividad.dart';
-void main() {
-  
+
+import 'package:hive_flutter/hive_flutter.dart';
+import 'package:deepsleep/data/models/suenoModel.dart';
+
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Hive.initFlutter(); //Persistencia de datos con Hive
+  Hive.registerAdapter(SuenoAdapter()); // ¡Importante!
+  await Hive.openBox<Sueno>('suenoBox'); // Abre la caja de sueños
+
   runApp(
     MultiProvider(
-      providers: [
-        ChangeNotifierProvider(
-          create: (_) => Controllers(),
-        ),
-      ],
+      providers: [ChangeNotifierProvider(create: (_) => Controllers())],
       child: const MiApp(),
     ),
   );
-    //const MiApp());
+  //const MiApp());
 }
 
 class MiApp extends StatelessWidget {
@@ -56,6 +59,7 @@ class _PaginaPrincipalState extends State<PaginaPrincipal> {
       return true; // Retorna true para continuar el ciclo
     });
   }
+
   int _selectedIndex = 0;
 
   void _onItemTapped(int index) {
@@ -71,15 +75,15 @@ class _PaginaPrincipalState extends State<PaginaPrincipal> {
         title: const Text("Deep Sleep"),
         backgroundColor: Colors.blueAccent,
       ),
-      body: _selectedIndex == 0 ? const PantallaSueno() : const PantallaEjercicio(),
+      body:
+          _selectedIndex == 0
+              ? const PantallaSueno()
+              : const PantallaEjercicio(),
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _selectedIndex,
         onTap: _onItemTapped,
         items: const [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.bedtime),
-            label: 'Sueño',
-          ),
+          BottomNavigationBarItem(icon: Icon(Icons.bedtime), label: 'Sueño'),
           BottomNavigationBarItem(
             icon: Icon(Icons.fitness_center),
             label: 'Ejercicio',

@@ -1,30 +1,34 @@
-import 'dart:ffi';
-import 'dart:math';
-import 'package:flutter/material.dart';
-import 'dart:async';
-import 'package:deepsleep/presentation/controllers/Sleepcontroller/historialSueno.dart';
-import 'package:deepsleep/data/services/CleintServer.dart'; // Para hacer la petición HTTP
+// import 'package:hive/hive.dart';
+// part 'ControlerSueno.g.dart'; // debe ser el mismo nombre que el archivo
 
-class Sueno with ChangeNotifier {
-  String fecha;
-  int estrellas;
-  String duracion;
-  String horaInicio;
-  String horaFinal;
-  String eficiencia;
-  Sueno(
-    this.fecha,
-    this.estrellas,
-    this.duracion,
-    this.horaInicio,
-    this.horaFinal,
-    this.eficiencia,
-  );
-  Sueno.empty()
-    : fecha = "",
-      estrellas = 0,
-      duracion = "",
-      horaInicio = "",
-      horaFinal = "",
-      eficiencia = "";
-}
+// //Modelo de la clase Sueno
+// @HiveType(typeId: 0)
+// class Sueno {
+//   @HiveField(0)
+//   String fecha;
+//   @HiveField(1)
+//   int estrellas;
+//   @HiveField(2)
+//   String duracion;
+//   @HiveField(3)
+//   String horaInicio;
+//   @HiveField(4)
+//   String horaFinal;
+//   @HiveField(5)
+//   String eficiencia;
+//   Sueno(
+//     this.fecha,
+//     this.estrellas,
+//     this.duracion,
+//     this.horaInicio,
+//     this.horaFinal,
+//     this.eficiencia,
+//   );
+//   Sueno.empty()
+//     : fecha = "",
+//       estrellas = 0,
+//       duracion = "",
+//       horaInicio = "",
+//       horaFinal = "",
+//       eficiencia = "";
+// }

@@ -15,7 +15,7 @@
 //     _historialSueno.add({"data2": data2, "cantidadEstrellas": cantidadEstrellas, "data": data,"horaInicio": horaInicio, "horaFinal": horaFinal,"eficiencia": eficiencia});
 //   }
 // }
-import 'ControlerSueno.dart';
+import 'package:deepsleep/data/models/suenoModel.dart';
 
 class ListSueno {
   // Lista de objetos Sueno

@@ -1,9 +1,8 @@
 import 'package:deepsleep/presentation/controllers/Controllers.dart';
-import 'package:deepsleep/presentation/controllers/Sleepcontroller/ControlerSueno.dart';
+import 'package:deepsleep/data/models/suenoModel.dart';
 import 'package:flutter/material.dart';
 import 'package:deepsleep/presentation/views/Sueno/widgets/statCard.dart';
 import 'package:provider/provider.dart';
-import 'package:deepsleep/presentation/controllers/Sleepcontroller/historialSueno.dart';
 
 class BuildRecordAndAverage extends StatelessWidget {
   const BuildRecordAndAverage({super.key});

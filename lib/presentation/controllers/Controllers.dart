@@ -3,7 +3,8 @@ import 'package:flutter/material.dart';
 import 'dart:async';
 import 'package:deepsleep/presentation/controllers/Sleepcontroller/historialSueno.dart'; // Para hacer la petición HTTP
 import 'package:deepsleep/presentation/controllers/ExerciseController/ControlerActividad.dart';
-import 'package:deepsleep/presentation/controllers/Sleepcontroller/ControlerSueno.dart';
+import 'package:deepsleep/data/models/suenoModel.dart';
+
 import 'package:deepsleep/presentation/controllers/ExerciseController/graficoController.dart';
 
 class Controllers with ChangeNotifier {

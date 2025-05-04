@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:deepsleep/presentation/controllers/Controllers.dart';
-import 'package:deepsleep/presentation/controllers/Sleepcontroller/ControlerSueno.dart';
+import 'package:deepsleep/data/models/suenoModel.dart';
+import 'package:hive/hive.dart';
 
 class BuildEncabezadoFijo extends StatelessWidget {
   const BuildEncabezadoFijo({
@@ -116,7 +117,18 @@ void mostrarFormularioDormir(BuildContext context) {
                   "70",
                 ),
               );
-
+              // Guardar en Hive
+              var suenoBox = Hive.box<Sueno>('suenoBox');
+              suenoBox.add(
+                Sueno(
+                  fechaFormateada,
+                  5,
+                  data,
+                  horaDormir,
+                  horaDespertar,
+                  "70",
+                ),
+              );
               // Mostrar mensaje de éxito
               ScaffoldMessenger.of(context).showSnackBar(
                 const SnackBar(
@@ -200,3 +212,5 @@ class LabelSueno extends StatelessWidget {
     );
   }
 }
+
+//List<Sueno> suenos = suenoBox.values.toList(); para leer los sueños guardados
