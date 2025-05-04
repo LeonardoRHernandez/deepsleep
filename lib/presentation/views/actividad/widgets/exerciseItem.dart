@@ -1,7 +1,8 @@
-
-
 import 'package:flutter/material.dart';
-import 'package:deepsleep/presentation/controllers/ExerciseController/historialExercice.dart';
+
+//import 'package:deepsleep/presentation/controllers/ExerciseController/historialExercice.dart';
+import 'package:deepsleep/data/models/ejercicioModel.dart';
+
 class BuildExerciseItem extends StatelessWidget {
   const BuildExerciseItem({
     super.key,
@@ -64,7 +65,20 @@ class BuildListaEjercicios extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // Lista de ejercicios
-    final List<Map<String, dynamic>> ejercicios = ListaEjercicios().exerciseList;
+    //final List<Map<String, dynamic>> ejercicios =
+    //    ListaEjercicios().exerciseList;
+    final List<Ejercicio> ejercicios = [
+      Ejercicio("Cardio Intenso", "15 oct - 1h 20 min", 300),
+      Ejercicio("Entrenamiento de Fuerza", "14 oct - 0h 40 min", 450),
+      Ejercicio("Yoga", "13 oct - 30 min", 200),
+      Ejercicio("Caminata", "12 oct - 1h 10 min", 250),
+      Ejercicio("Natación", "11 oct - 50 min", 400),
+      Ejercicio("Ciclismo", "10 oct - 1h 30 min", 350),
+      Ejercicio("Pilates", "9 oct - 45 min", 220),
+      Ejercicio("Entrenamiento HIIT", "8 oct - 30 min", 500),
+      Ejercicio("Zumba", "7 oct - 1h", 300),
+      Ejercicio("Entrenamiento de Resistencia", "6 oct - 1h 15 min", 400),
+    ];
 
     return ListView.builder(
       shrinkWrap: true,
@@ -75,9 +89,9 @@ class BuildListaEjercicios extends StatelessWidget {
         return Column(
           children: [
             BuildExerciseItem(
-              title: ejercicio["title"],
-              subtitle: ejercicio["subtitle"],
-              kcal: ejercicio["kcal"],
+              title: ejercicio.title,
+              subtitle: ejercicio.subtitle,
+              kcal: ejercicio.kcal,
             ),
             const SizedBox(height: 6),
           ],

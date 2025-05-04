@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:deepsleep/presentation/controllers/Controllers.dart';
-import 'package:deepsleep/presentation/controllers/ExerciseController/historialExercice.dart';
+
 class ProgresoWidget extends StatefulWidget {
   const ProgresoWidget({super.key});
 
@@ -15,7 +15,7 @@ class _ProgresoWidgetState extends State<ProgresoWidget> {
   @override
   Widget build(BuildContext context) {
     // var Ejercicio = ListaEjercicios().exerciseList; // Lista de ejercicios
-            
+
     //         ; // Promedio de horas de ejercicio
     // var promedioSemanal = calcularPromedioSemanalYMensual(Ejercicio); // Promedio de horas de sueño
     String titulo = _esSemanal ? "Progreso Semanal" : "Progreso Mensual";
@@ -73,25 +73,29 @@ class _ProgresoWidgetState extends State<ProgresoWidget> {
                 ),
               ),
             ],
-          )
+          ),
         ],
       ),
     );
   }
 }
 
-Map<String, String> calcularPromedioSemanalYMensual(List<Map<String, dynamic>> ejercicios) {
+Map<String, String> calcularPromedioSemanalYMensual(
+  List<Map<String, dynamic>> ejercicios,
+) {
   int totalHorasSemanal = 0;
   int totalMinutosSemanal = 0;
   int totalHorasMensual = 0;
   int totalMinutosMensual = 0;
 
   DateTime hoy = DateTime.now();
-  int diasEnMes = DateTime(hoy.year, hoy.month + 1, 0).day; // Días en el mes actual
+  int diasEnMes =
+      DateTime(hoy.year, hoy.month + 1, 0).day; // Días en el mes actual
 
   for (var ejercicio in ejercicios) {
     String fecha = ejercicio['subtitle'].split(' - ')[0]; // Ejemplo: "15 oct"
-    String tiempo = ejercicio['subtitle'].split(' - ')[1]; // Ejemplo: "1h 20 min"
+    String tiempo =
+        ejercicio['subtitle'].split(' - ')[1]; // Ejemplo: "1h 20 min"
 
     // Convierte la fecha a un objeto DateTime
     DateTime fechaEjercicio = DateTime(
