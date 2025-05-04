@@ -116,76 +116,148 @@ class _PantallaAjustesState extends State<PantallaAjustes> {
     _mostrarFormularioInicial();
   }
 
-  @override
-  Widget build(BuildContext context) {
-    if (!_formularioCompletado) {
-      return const Center(child: CircularProgressIndicator());
-    }
-
-    return SafeArea(
-      child: SingleChildScrollView(
-        padding: const EdgeInsets.all(20),
-        child: Column(
-          children: [
-            Card(
-              elevation: 4,
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-              child: Padding(
-                padding: const EdgeInsets.symmetric(vertical: 24, horizontal: 16),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text("Mis datos", style: Theme.of(context).textTheme.titleLarge),
-                    const SizedBox(height: 16),
-                    _buildDato("Peso", "$_peso kg"),
-                    _buildDato("Estatura", "$_estatura cm"),
-                    _buildDato("Edad", "$_edad años"),
-                    const SizedBox(height: 20),
-                    ElevatedButton.icon(
-                      onPressed: _editarDatos,
-                      icon: const Icon(Icons.edit),
-                      label: const Text("Editar datos"),
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.orangeAccent,
-                        foregroundColor: Colors.white,
-                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-            const SizedBox(height: 40),
-            ElevatedButton.icon(
-              onPressed: () {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(content: Text("Bluetooth no implementado aún")),
-                );
-              },
-              icon: const Icon(Icons.bluetooth),
-              label: const Text("Bluetooth"),
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.blueAccent,
-                foregroundColor: Colors.white,
-                padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 14),
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
+@override
+Widget build(BuildContext context) {
+  if (!_formularioCompletado) {
+    return const Center(child: CircularProgressIndicator());
   }
 
-  Widget _buildDato(String titulo, String valor) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 6),
-      child: Row(
+  return Scaffold(
+    body: SafeArea(
+      child: Column(
         children: [
-          Text("$titulo: ",
-              style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
-          Text(valor, style: const TextStyle(fontSize: 16)),
+          // Encabezado mejorado
+          Container(
+            width: double.infinity,
+            padding: const EdgeInsets.all(20),
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+                colors: [
+                  Colors.deepPurple.shade700,
+                  Colors.deepPurple.shade400,
+                ],
+              ),
+              borderRadius: const BorderRadius.only(
+                bottomLeft: Radius.circular(30),
+                bottomRight: Radius.circular(30),
+              ),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.deepPurple.withOpacity(0.3),
+                  spreadRadius: 5,
+                  blurRadius: 20,
+                  offset: const Offset(0, 5),
+                ),
+              ],
+            ),
+            child: Column(
+              children: [
+                Container(
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    border: Border.all(
+                      color: Colors.white.withOpacity(0.3),
+                      width: 3,
+                    ),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withOpacity(0.2),
+                        spreadRadius: 2,
+                        blurRadius: 10,
+                        offset: const Offset(0, 3),
+                      ),
+                    ],
+                  ),
+                  child: const CircleAvatar(
+                    radius: 40,
+                    backgroundColor: Colors.white10,
+                    child: Icon(
+                      Icons.account_circle,
+                      color: Colors.white,
+                      size: 60,
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 15),
+                const Text(
+                  "Perfil",
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 28,
+                    fontWeight: FontWeight.bold,
+                    letterSpacing: 1.2,
+                  ),
+                ),
+                const SizedBox(height: 5),
+                Container(
+                  height: 3,
+                  width: 60,
+                  margin: const EdgeInsets.only(bottom: 5),
+                  decoration: BoxDecoration(
+                    color: Colors.white.withOpacity(0.5),
+                    borderRadius: BorderRadius.circular(3),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          
+          // Resto del contenido (igual que antes)
+          Expanded(
+            child: ListView(
+              padding: const EdgeInsets.all(25),
+              children: [
+                _buildTarjetaDato("Peso", "$_peso kg", Icons.monitor_weight, Colors.orange),
+                _buildTarjetaDato("Estatura", "$_estatura cm", Icons.height, Colors.green),
+                _buildTarjetaDato("Edad", "$_edad años", Icons.cake, Colors.blue),
+
+                const SizedBox(height: 20),
+                ElevatedButton.icon(
+                  onPressed: () {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(content: Text("Bluetooth no implementado aún")),
+                    );
+                  },
+                  icon: const Icon(Icons.bluetooth),
+                  label: const Text("Bluetooth"),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.blueAccent,
+                    foregroundColor: Colors.white,
+                    padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 14),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(14),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
         ],
+      ),
+    ),
+    floatingActionButton: FloatingActionButton.extended(
+      onPressed: _editarDatos,
+      icon: const Icon(Icons.edit, color: Colors.white),
+      label: const Text("Editar datos", style: TextStyle(color: Colors.white)),
+      backgroundColor: Colors.deepPurple,
+    ),
+  );
+}
+
+  Widget _buildTarjetaDato(String titulo, String valor, IconData icono, Color color) {
+  return Card(
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+      elevation: 3,
+      margin: const EdgeInsets.symmetric(vertical: 10),
+      child: ListTile(
+        leading: CircleAvatar(
+          backgroundColor: color.withOpacity(0.1),
+          child: Icon(icono, color: color),
+        ),
+        title: Text(titulo, style: const TextStyle(fontWeight: FontWeight.bold)),
+        subtitle: Text(valor, style: const TextStyle(fontSize: 16)),
       ),
     );
   }
