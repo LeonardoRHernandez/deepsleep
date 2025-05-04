@@ -11,16 +11,12 @@ class BuildRecordAndAverage extends StatelessWidget {
   Widget build(BuildContext context) {
     //String tiempoMaximo=calcularTiempoMaximo(provider.listsueno.historialSueno);
     var provider = Provider.of<Controllers>(context);
-    String tiempoMaximo = calcularTiempoMaximo(
-      provider.listsueno.historialSueno,
-    );
+    String tiempoMaximo = calcularTiempoMaximo(provider.listsueno);
     List<String> partes = tiempoMaximo.split('|');
     String tiempo = partes[0]; // Tiempo máximo
     String fecha = partes[1]; // Fecha asociada al tiempo máximo
 
-    String Promedio7Dias = calcularPromedioUltimos7Dias(
-      provider.listsueno.historialSueno,
-    );
+    String Promedio7Dias = calcularPromedioUltimos7Dias(provider.listsueno);
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [

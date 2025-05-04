@@ -8,10 +8,7 @@ class BuildSleepDetails extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var provider = Provider.of<Controllers>(context);
-    var sleepDatalast =
-        provider
-            .listsueno
-            .historialSueno[provider.listsueno.historialSueno.length - 1];
+    var sleepDatalast = provider.listsueno[provider.listsueno.length - 1];
     var eficiencia = sleepDatalast.eficiencia;
     if (eficiencia == "0") {
       eficiencia = "XXX";

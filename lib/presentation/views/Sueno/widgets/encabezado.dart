@@ -107,7 +107,7 @@ void mostrarFormularioDormir(BuildContext context) {
                 context,
                 listen:
                     false, //asignar estos valorees a un objeto de la clase Sueno
-              ).listsueno.agregarSueno(
+              ).agregarSueno(
                 Sueno(
                   fechaFormateada,
                   5,

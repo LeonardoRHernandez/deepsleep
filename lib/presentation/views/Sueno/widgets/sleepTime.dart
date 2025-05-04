@@ -31,14 +31,7 @@ class BuildSleepTime extends StatelessWidget {
             child: Consumer<Controllers>(
               builder: (context, provider, child) {
                 var tiempo =
-                    provider
-                        .listsueno
-                        .historialSueno[provider
-                                .listsueno
-                                .historialSueno
-                                .length -
-                            1]
-                        .duracion;
+                    provider.listsueno[provider.listsueno.length - 1].duracion;
                 return Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
