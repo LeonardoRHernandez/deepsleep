@@ -1,48 +1,107 @@
 import 'dart:convert';
-import 'dart:ffi';
-import 'package:http/http.dart' as http;
+import 'dart:typed_data';
+import 'package:flutter_blue_plus/flutter_blue_plus.dart';
 
-class DataFetcher {
-  final String baseUrl;
+class BLEService {
+  final Guid serviceUuid = Guid("0000abcd-0000-1000-8000-00805f9b34fb");
+  final Guid characteristicUuid = Guid("00001234-0000-1000-8000-00805f9b34fb");
 
-  DataFetcher({required this.baseUrl});
+  BluetoothDevice? connectedDevice;
+  BluetoothCharacteristic? notifyCharacteristic;
 
-  /// Obtiene datos del servidor y retorna la frecuencia cardíaca.
-  Future<int> fetchData() async {
-    try {
-      final response = await http.get(Uri.parse(baseUrl));
+  Function(Map<String, dynamic>)? onDataReceived;
+  bool isConnecting = false;
 
-      if (response.statusCode == 200) {
-        // Parseamos el JSON de la respuesta
-        final data = jsonDecode(response.body);
+  void startScan({Function(Map<String, dynamic>)? onData}) {
+    onDataReceived = onData;
+    _tryConnect();
+  }
 
-        // Validamos que los datos contengan las claves esperadas
-        if (data.containsKey('heartRate') && data.containsKey('steps')) {
-          print('Heart Rate: ${data['heartRate']}');
-          print('Steps: ${data['steps']}');
-           return (data['heartRate'] as num).toInt(); // Retorna la frecuencia cardíaca o 0 si no está presente
-        } else {
-          print('Error: Respuesta no contiene los datos esperados.');
-          return 0;
+  void _tryConnect() async {
+    if (isConnecting) return;
+    isConnecting = true;
+
+    print("🔍 Iniciando escaneo BLE...");
+    await FlutterBluePlus.startScan(timeout: const Duration(seconds: 10));
+
+    FlutterBluePlus.scanResults.listen((results) async {
+      for (ScanResult r in results) {
+        print("📱 Dispositivo detectado: ${r.device.name} (${r.device.id})");
+        print("🔍 UUIDs anunciados: ${r.advertisementData.serviceUuids}");
+
+        // Comparación flexible con UUID "abcd"
+        if (r.advertisementData.serviceUuids.any(
+          (uuid) => uuid.toString().toLowerCase().contains("abcd"),
+        )) {
+          print("✅ Coincidencia encontrada, conectando a ${r.device.name}");
+          await FlutterBluePlus.stopScan();
+          connectedDevice = r.device;
+          await _connectToDevice(connectedDevice!);
+          isConnecting = false;
+          return;
         }
-      } else {
-        //Manejo de errores HTTP
-        print('Error al obtener los datos: ${response.statusCode}');
-        return 0;
       }
-    } catch (e) {
-      // Manejo de excepciones (por ejemplo, problemas de red)
-      print('Excepción al obtener los datos: $e');
-      return 0;
+    });
+
+    // Si después de un tiempo no encuentra, volver a intentar
+    await Future.delayed(const Duration(seconds: 12));
+    if (connectedDevice == null) {
+      print("❌ No se encontró el dispositivo. Reintentando...");
+      isConnecting = false;
+      _tryConnect();
     }
   }
-}
 
-void main() async {
-  final fetcher = DataFetcher(baseUrl: 'http://192.168.1.97:3000');
+  Future<void> _connectToDevice(BluetoothDevice device) async {
+    try {
+      await device.connect(autoConnect: false);
+      device.connectionState.listen((state) {
+        if (state == BluetoothConnectionState.disconnected) {
+          print("Dispositivo desconectado. Reintentando...");
+          connectedDevice = null;
+          _tryConnect(); // reconecta
+        }
+      });
 
-  //print('Obteniendo datos del servidor...');
-  final int heartRate = await fetcher.fetchData();
-  int nuevoDato = heartRate;
-  print("$nuevoDato"); //!= null ? int.parse(heartRate) : 0;
+      List<BluetoothService> services = await device.discoverServices();
+      for (BluetoothService s in services) {
+        if (s.uuid == serviceUuid) {
+          for (BluetoothCharacteristic c in s.characteristics) {
+            if (c.uuid == characteristicUuid) {
+              notifyCharacteristic = c;
+              await c.setNotifyValue(true);
+
+              c.value.listen((event) {
+                try {
+                  if (event.isEmpty) return; // Ignorar valores vacíos
+
+                  final decoded = utf8.decode(Uint8List.fromList(event));
+                  final data = jsonDecode(decoded);
+
+                  if (data is Map<String, dynamic>) {
+                    print("Datos recibidos: $data");
+                    onDataReceived?.call(data);
+                  } else {
+                    //print("⚠️ Datos recibidos no son un Map: $data");
+                  }
+                } catch (e) {
+                  //print("❗ Error al procesar datos BLE: $e");
+                }
+              });
+            }
+          }
+        }
+      }
+    } catch (e) {
+      print("Error al conectar con el dispositivo BLE: $e");
+      connectedDevice = null;
+      await Future.delayed(const Duration(seconds: 3));
+      _tryConnect(); // intenta reconectar
+    }
+  }
+
+  Future<void> disconnect() async {
+    await connectedDevice?.disconnect();
+    connectedDevice = null;
+  }
 }

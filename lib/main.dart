@@ -49,20 +49,14 @@ class _PaginaPrincipalState extends State<PaginaPrincipal> {
   @override
   void initState() {
     super.initState();
-    _iniciarAutoActualizacion();
+   WidgetsBinding.instance.addPostFrameCallback((_) {
+    final actividad = Provider.of<Controllers>(context, listen: false).actividad;
+    actividad.iniciarMonitoreo();
+  });
+
   }
 
-  void _iniciarAutoActualizacion() {
-    Future.doWhile(() async {
-      await Future.delayed(const Duration(seconds: 1));
-      if (!mounted) return false; // Verifica si el widget está montado
-      Provider.of<Controllers>(
-        context,
-        listen: false,
-      ).actividad.agregarNuevoDato();
-      return true; // Retorna true para continuar el ciclo
-    });
-  }
+ 
 
   int _selectedIndex = 1;
   bool _isFirstTimeAjustes = true;
