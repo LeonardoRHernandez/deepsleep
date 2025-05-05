@@ -168,13 +168,26 @@ void mostrarFormularioDormir(BuildContext context) {
                                   Provider.of<Controllers>(
                                     context,
                                     listen: false,
-                                  ).listsueno.agregarSueno(
-                                    fechaFormateada,
-                                    0,
-                                    data,
-                                    horaDormirStr,
-                                    horaDespertarStr,
-                                    "0",
+                                  ).agregarSueno(
+                                    Sueno(
+                                      fechaFormateada,
+                                      0,
+                                      data,
+                                      horaDormirStr,
+                                      horaDespertarStr,
+                                      "0",
+                                    ),
+                                  );
+                                  var suenoBox = Hive.box<Sueno>('suenoBox');
+                                  suenoBox.add(
+                                    Sueno(
+                                      fechaFormateada,
+                                      5,
+                                      data,
+                                      horaDormirStr,
+                                      horaDespertarStr,
+                                      "70",
+                                    ),
                                   );
 
                                   ScaffoldMessenger.of(context).showSnackBar(
