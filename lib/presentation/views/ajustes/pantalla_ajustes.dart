@@ -8,8 +8,8 @@ class PantallaAjustes extends StatefulWidget {
   final void Function({bool redirigirASueno}) desbloquearPantallas;
 
   const PantallaAjustes({
-    Key? key, 
-    required this.desbloquearPantallas
+    Key? key,
+    required this.desbloquearPantallas,
   }) : super(key: key);
 
   @override
@@ -23,7 +23,7 @@ class _PantallaAjustesState extends State<PantallaAjustes> {
   final _edadController = TextEditingController();
 
   bool _formularioCompletado = false;
-  String _peso = "", _estatura = "", _edad = "";
+  String _peso = "", _estatura = "", _edad = "", _genero = "";
 
   @override
   void initState() {
@@ -43,6 +43,7 @@ class _PantallaAjustesState extends State<PantallaAjustes> {
         _peso = prefs.getString('peso') ?? '';
         _estatura = prefs.getString('estatura') ?? '';
         _edad = prefs.getString('edad') ?? '';
+        _genero = prefs.getString('genero') ?? '';
       });
 
       WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -60,29 +61,33 @@ class _PantallaAjustesState extends State<PantallaAjustes> {
         pesoController: _pesoController,
         estaturaController: _estaturaController,
         edadController: _edadController,
-        onGuardar: _guardarDatos,
+        generoInicial: _genero.isNotEmpty ? _genero : null,
+        onGuardar: (generoSeleccionado) {
+          setState(() {
+            _genero = generoSeleccionado;
+          });
+          _guardarDatos();
+        },
       ),
     );
   }
 
   Future<void> _guardarDatos() async {
-    if (_formKey.currentState!.validate()) {
-      final prefs = await SharedPreferences.getInstance();
-      await prefs.setBool('formularioCompletado', true);
-      await prefs.setString('peso', _pesoController.text);
-      await prefs.setString('estatura', _estaturaController.text);
-      await prefs.setString('edad', _edadController.text);
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setBool('formularioCompletado', true);
+    await prefs.setString('peso', _pesoController.text);
+    await prefs.setString('estatura', _estaturaController.text);
+    await prefs.setString('edad', _edadController.text);
+    await prefs.setString('genero', _genero);
 
-      setState(() {
-        _formularioCompletado = true;
-        _peso = _pesoController.text;
-        _estatura = _estaturaController.text;
-        _edad = _edadController.text;
-      });
+    setState(() {
+      _formularioCompletado = true;
+      _peso = _pesoController.text;
+      _estatura = _estaturaController.text;
+      _edad = _edadController.text;
+    });
 
-      widget.desbloquearPantallas();
-      Navigator.of(context).pop();
-    }
+    widget.desbloquearPantallas();
   }
 
   void _editarDatos() {
@@ -108,28 +113,40 @@ class _PantallaAjustesState extends State<PantallaAjustes> {
                 padding: const EdgeInsets.all(25),
                 children: [
                   TarjetaDato(
-                    titulo: "Peso", 
-                    valor: "$_peso kg", 
-                    icono: Icons.monitor_weight, 
-                    color: Colors.orange
+                    titulo: "Peso",
+                    valor: "$_peso kg",
+                    icono: Icons.monitor_weight,
+                    color: Colors.orange,
                   ),
                   TarjetaDato(
-                    titulo: "Estatura", 
-                    valor: "$_estatura cm", 
-                    icono: Icons.height, 
-                    color: Colors.green
+                    titulo: "Estatura",
+                    valor: "$_estatura cm",
+                    icono: Icons.height,
+                    color: Colors.green,
                   ),
                   TarjetaDato(
-                    titulo: "Edad", 
-                    valor: "$_edad años", 
-                    icono: Icons.cake, 
-                    color: Colors.blue
+                    titulo: "Edad",
+                    valor: "$_edad años",
+                    icono: Icons.cake,
+                    color: Colors.blue,
+                  ),
+                  TarjetaDato(
+                    titulo: "Género",
+                    valor: _genero,
+                    icono: _genero == 'Masculino'
+                        ? Icons.male
+                        : Icons.female,
+                    color: _genero == 'Masculino'
+                        ? Colors.blue
+                        : Colors.pink,
                   ),
                   const SizedBox(height: 20),
                   ElevatedButton.icon(
                     onPressed: () {
                       ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(content: Text("Bluetooth no implementado aún")),
+                        const SnackBar(
+                            content:
+                                Text("Bluetooth no implementado aún")),
                       );
                     },
                     icon: const Icon(Icons.bluetooth),
@@ -137,7 +154,8 @@ class _PantallaAjustesState extends State<PantallaAjustes> {
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.blueAccent,
                       foregroundColor: Colors.white,
-                      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 14),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 24, vertical: 14),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(14),
                       ),
@@ -152,7 +170,8 @@ class _PantallaAjustesState extends State<PantallaAjustes> {
       floatingActionButton: FloatingActionButton.extended(
         onPressed: _editarDatos,
         icon: const Icon(Icons.edit, color: Colors.white),
-        label: const Text("Editar datos", style: TextStyle(color: Colors.white)),
+        label: const Text("Editar datos",
+            style: TextStyle(color: Colors.white)),
         backgroundColor: Colors.deepPurple,
       ),
     );
