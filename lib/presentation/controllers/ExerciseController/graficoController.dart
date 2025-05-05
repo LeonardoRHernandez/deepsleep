@@ -9,16 +9,16 @@ class Graficar {
   List<FlSpot> get data => _data;
 
   List<FlSpot> listGraf(List<int> provider) => provider
-        .sublist(provider.length > 40 ? provider.length - 40 : 0)
-        .asMap()
-        .entries
-        .map(
-          (entry) => FlSpot(
-            entry.key.toDouble(),
-            entry.value.toDouble(),
-          ),
-        )
-        .toList();
+    .asMap()
+    .entries
+    .map(
+      (entry) => FlSpot(
+        entry.key.toDouble(),
+        entry.value.toDouble(),
+      ),
+    )
+    .toList();
+
     
     
   
