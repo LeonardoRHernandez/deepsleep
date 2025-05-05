@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:deepsleep/presentation/controllers/Controllers.dart';
+import 'package:flutter_time_picker_spinner/flutter_time_picker_spinner.dart';
 import 'package:deepsleep/data/models/suenoModel.dart';
 import 'package:hive/hive.dart';
 
@@ -54,95 +55,150 @@ class BuildEncabezadoFijo extends StatelessWidget {
 }
 
 void mostrarFormularioDormir(BuildContext context) {
-  final dormirController = TextEditingController();
-  final despertarController = TextEditingController();
+  DateTime horaDormir = DateTime.now();
+  DateTime horaDespertar = DateTime.now();
 
   showDialog(
     context: context,
     builder: (BuildContext context) {
-      String labelText = "Hora que te fuiste a dormir";
-      var hintText = "Ej. 22:30";
-      var labelText2 = "Hora que te despertaste";
-      var hintText2 = "Ej. 07:00";
-      return AlertDialog(
-        title: const Text("Agregar horas de sueño"),
-        content: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            LabelSueno(
-              controller: dormirController,
-              labelText: labelText,
-              hintText: hintText,
+      return StatefulBuilder(
+        builder: (context, setState) {
+          return AlertDialog(
+            backgroundColor: Colors.black,
+            title: const Text(
+              "Hora que te fuiste a dormir",
+              style: TextStyle(color: Colors.white),
             ),
-            const SizedBox(height: 12),
-            LabelSueno(
-              controller: despertarController,
-              labelText: labelText2,
-              hintText: hintText2,
+            content: TimePickerSpinner(
+              is24HourMode: true,
+              normalTextStyle: const TextStyle(
+                fontSize: 18,
+                color: Colors.grey,
+              ),
+              highlightedTextStyle: const TextStyle(
+                fontSize: 24,
+                color: Colors.white,
+              ),
+              spacing: 40,
+              itemHeight: 60,
+              isForce2Digits: true,
+              onTimeChange: (time) {
+                setState(() {
+                  horaDormir = time;
+                });
+              },
             ),
-          ],
-        ),
-        actions: [
-          TextButton(
-            onPressed: () {
-              Navigator.of(context).pop();
-            },
-            child: const Text("Cancelar"),
-          ),
-          ElevatedButton(
-            onPressed: () {
-              // Obtén las horas ingresadas
-              String horaDormir = dormirController.text;
-              String horaDespertar = despertarController.text;
 
-              // Procesar los datos de sueño
-              String data = procesarDatos(horaDormir, horaDespertar);
-
-              // Lógica para guardar los datos de sueño
-              DateTime hoy = DateTime.now();
-              String fechaFormateada =
-                  "${hoy.year}-${hoy.month.toString().padLeft(2, '0')}-${hoy.day.toString().padLeft(2, '0')}";
-
-              Provider.of<Controllers>(
-                context,
-                listen:
-                    false, //asignar estos valorees a un objeto de la clase Sueno
-              ).agregarSueno(
-                Sueno(
-                  fechaFormateada,
-                  5,
-                  data,
-                  horaDormir,
-                  horaDespertar,
-                  "70",
+            actions: [
+              TextButton(
+                child: const Text(
+                  "Cancelar",
+                  textAlign: TextAlign.start,
+                  style: TextStyle(color: Colors.white),
                 ),
-              );
-              // Guardar en Hive
-              var suenoBox = Hive.box<Sueno>('suenoBox');
-              suenoBox.add(
-                Sueno(
-                  fechaFormateada,
-                  5,
-                  data,
-                  horaDormir,
-                  horaDespertar,
-                  "70",
+                onPressed: () => Navigator.of(context).pop(),
+              ),
+              ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.white10,
+                  foregroundColor: Colors.white,
                 ),
-              );
-              // Mostrar mensaje de éxito
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(
-                  content: Text("Datos de sueño guardados con éxito"),
-                  duration: Duration(seconds: 2),
-                ),
-              );
+                child: const Text("Siguiente"),
+                onPressed: () {
+                  Navigator.of(context).pop();
 
-              // Cerrar el diálogo
-              Navigator.of(context).pop();
-            },
-            child: const Text("Guardar"),
-          ),
-        ],
+                  showDialog(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return StatefulBuilder(
+                        builder: (context, setState) {
+                          return AlertDialog(
+                            backgroundColor: Colors.black,
+                            title: const Text(
+                              "Hora que te despertaste",
+                              style: TextStyle(color: Colors.white),
+                            ),
+                            content: TimePickerSpinner(
+                              is24HourMode: true,
+                              normalTextStyle: const TextStyle(
+                                fontSize: 18,
+                                color: Colors.grey,
+                              ),
+                              highlightedTextStyle: const TextStyle(
+                                fontSize: 24,
+                                color: Colors.white,
+                              ),
+                              spacing: 40,
+                              itemHeight: 60,
+                              isForce2Digits: true,
+                              onTimeChange: (time) {
+                                setState(() {
+                                  horaDespertar = time;
+                                });
+                              },
+                            ),
+                            actions: [
+                              TextButton(
+                                child: const Text(
+                                  "Cancelar",
+                                  style: TextStyle(color: Colors.white),
+                                ),
+                                onPressed: () => Navigator.of(context).pop(),
+                              ),
+                              ElevatedButton(
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: Colors.white10,
+                                  foregroundColor: Colors.white,
+                                ),
+                                child: const Text("Guardar"),
+                                onPressed: () {
+                                  String horaDormirStr =
+                                      "${horaDormir.hour.toString().padLeft(2, '0')}:${horaDormir.minute.toString().padLeft(2, '0')}";
+                                  String horaDespertarStr =
+                                      "${horaDespertar.hour.toString().padLeft(2, '0')}:${horaDespertar.minute.toString().padLeft(2, '0')}";
+
+                                  String data = procesarDatos(
+                                    horaDormirStr,
+                                    horaDespertarStr,
+                                  );
+                                  DateTime hoy = DateTime.now();
+                                  String fechaFormateada =
+                                      "${hoy.year}-${hoy.month.toString().padLeft(2, '0')}-${hoy.day.toString().padLeft(2, '0')}";
+
+                                  Provider.of<Controllers>(
+                                    context,
+                                    listen: false,
+                                  ).listsueno.agregarSueno(
+                                    fechaFormateada,
+                                    0,
+                                    data,
+                                    horaDormirStr,
+                                    horaDespertarStr,
+                                    "0",
+                                  );
+
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    const SnackBar(
+                                      content: Text(
+                                        "Datos de sueño guardados con éxito",
+                                      ),
+                                      duration: Duration(seconds: 2),
+                                    ),
+                                  );
+                                  Navigator.of(context).pop();
+                                },
+                              ),
+                            ],
+                          );
+                        },
+                      );
+                    },
+                  );
+                },
+              ),
+            ],
+          );
+        },
       );
     },
   );
@@ -172,7 +228,7 @@ String procesarDatos(String horaDormir, String horaDespertar) {
     final horas = duracion.inHours;
     final minutos = duracion.inMinutes % 60;
 
-    return "${horas}h ${minutos}m";
+    return "${horas.toString().padLeft(2, '0')}h ${minutos.toString().padLeft(2, '0')}m";
   } catch (e) {
     return "Error al procesar los datos: $e";
   }
