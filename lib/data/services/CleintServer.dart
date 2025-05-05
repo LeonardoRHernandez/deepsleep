@@ -5,7 +5,8 @@ import 'package:flutter_blue_plus/flutter_blue_plus.dart';
 class BLEService {
   final Guid serviceUuid = Guid("0000abcd-0000-1000-8000-00805f9b34fb");
   final Guid characteristicUuid = Guid("00001234-0000-1000-8000-00805f9b34fb");
-
+  int _estado = 0 ;// 0: Escaneando, 1: Conectado, 2: Error, 3: Desconectado
+  int get estado => _estado;
   BluetoothDevice? connectedDevice;
   BluetoothCharacteristic? notifyCharacteristic;
 
@@ -38,6 +39,7 @@ class BLEService {
           connectedDevice = r.device;
           await _connectToDevice(connectedDevice!);
           isConnecting = false;
+          _estado = 1;
           return;
         }
       }
@@ -48,6 +50,7 @@ class BLEService {
     if (connectedDevice == null) {
       print("❌ No se encontró el dispositivo. Reintentando...");
       isConnecting = false;
+      _estado = 0;
       _tryConnect();
     }
   }
@@ -59,6 +62,7 @@ class BLEService {
         if (state == BluetoothConnectionState.disconnected) {
           print("Dispositivo desconectado. Reintentando...");
           connectedDevice = null;
+          _estado = 3;
           _tryConnect(); // reconecta
         }
       });
@@ -96,6 +100,7 @@ class BLEService {
       print("Error al conectar con el dispositivo BLE: $e");
       connectedDevice = null;
       await Future.delayed(const Duration(seconds: 3));
+      _estado = 2;
       _tryConnect(); // intenta reconectar
     }
   }
