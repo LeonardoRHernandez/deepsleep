@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:deepsleep/presentation/controllers/Controllers.dart';
+import 'package:deepsleep/data/models/suenoModel.dart';
 
 class BuildSleepDetails extends StatelessWidget {
   const BuildSleepDetails({super.key});
@@ -8,7 +9,20 @@ class BuildSleepDetails extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var provider = Provider.of<Controllers>(context);
-    var sleepDatalast = provider.listsueno[provider.listsueno.length - 1];
+    //var sleepDatalast = provider.listsueno[provider.listsueno.length - 1];
+    var sleepDatalast =
+        provider.listsueno.isNotEmpty ? provider.listsueno.last : null;
+    if (sleepDatalast == null) {
+      // Si no hay datos de sueño, mostrar las cartas vacías
+      return Row(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: [
+          BuildDetailCard(icon: '🕒', label: 'Inicio', value: 'Sin datos'),
+          BuildDetailCard(icon: '⏰', label: 'Fin', value: 'Sin datos'),
+          BuildDetailCard(icon: '💤', label: 'Eficiencia', value: 'Sin datos'),
+        ],
+      );
+    }
     var eficiencia = sleepDatalast.eficiencia;
     if (eficiencia == "0") {
       eficiencia = "XXX";

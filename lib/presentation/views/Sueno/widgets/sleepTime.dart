@@ -30,8 +30,11 @@ class BuildSleepTime extends StatelessWidget {
             alignment: Alignment.center,
             child: Consumer<Controllers>(
               builder: (context, provider, child) {
-                var tiempo =
-                    provider.listsueno[provider.listsueno.length - 1].duracion;
+                var ultimoSueno =
+                    provider.listsueno.isNotEmpty
+                        ? provider.listsueno.last
+                        : null;
+                var tiempo = ultimoSueno?.duracion ?? "Sin datos";
                 return Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [

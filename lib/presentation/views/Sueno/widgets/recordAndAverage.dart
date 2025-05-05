@@ -65,6 +65,9 @@ String calcularTiempoMaximo(List<Sueno> historialSueno) {
 }
 
 String calcularPromedioUltimos7Dias(List<Sueno> historialSueno) {
+  if (historialSueno.isEmpty) {
+    return "0H\n0M"; // Si no hay datos, retorna 0
+  }
   int totalHoras = 0;
   int totalMinutos = 0;
   int diasContados = 0;

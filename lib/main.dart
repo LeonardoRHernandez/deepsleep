@@ -12,7 +12,7 @@ void main() async {
   await Hive.initFlutter(); //Persistencia de datos con Hive
   Hive.registerAdapter(SuenoAdapter()); // ¡Importante!
   await Hive.openBox<Sueno>('suenoBox'); // Abre la caja de sueños
-
+  //await Hive.box<Sueno>('suenoBox').clear(); //para limpiar la caja en pruebas
   runApp(
     MultiProvider(
       providers: [ChangeNotifierProvider(create: (_) => Controllers())],
