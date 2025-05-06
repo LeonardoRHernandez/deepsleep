@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:hive_flutter/hive_flutter.dart';
+import 'package:deepsleep/data/models/configModel.dart';
 
 class FormularioAjustes extends StatefulWidget {
   final GlobalKey<FormState> formKey;
@@ -6,9 +8,11 @@ class FormularioAjustes extends StatefulWidget {
   final TextEditingController estaturaController;
   final TextEditingController edadController;
   final String? generoInicial;
+  //variable para la caja de configuracion
+
   final void Function(String genero) onGuardar;
 
-  const FormularioAjustes({
+  FormularioAjustes({
     super.key,
     required this.formKey,
     required this.pesoController,
@@ -45,22 +49,31 @@ class _FormularioAjustesState extends State<FormularioAjustes> {
                 controller: widget.pesoController,
                 decoration: const InputDecoration(labelText: 'Peso (kg)'),
                 keyboardType: TextInputType.number,
-                validator: (value) =>
-                    value == null || value.isEmpty ? 'Ingrese su peso' : null,
+                validator:
+                    (value) =>
+                        value == null || value.isEmpty
+                            ? 'Ingrese su peso'
+                            : null,
               ),
               TextFormField(
                 controller: widget.estaturaController,
                 decoration: const InputDecoration(labelText: 'Estatura (cm)'),
                 keyboardType: TextInputType.number,
-                validator: (value) =>
-                    value == null || value.isEmpty ? 'Ingrese su estatura' : null,
+                validator:
+                    (value) =>
+                        value == null || value.isEmpty
+                            ? 'Ingrese su estatura'
+                            : null,
               ),
               TextFormField(
                 controller: widget.edadController,
                 decoration: const InputDecoration(labelText: 'Edad'),
                 keyboardType: TextInputType.number,
-                validator: (value) =>
-                    value == null || value.isEmpty ? 'Ingrese su edad' : null,
+                validator:
+                    (value) =>
+                        value == null || value.isEmpty
+                            ? 'Ingrese su edad'
+                            : null,
               ),
               const SizedBox(height: 16),
               Column(
@@ -110,8 +123,16 @@ class _FormularioAjustesState extends State<FormularioAjustes> {
           child: const Text('Cancelar'),
         ),
         ElevatedButton(
-          onPressed: () {
+          onPressed: () async {
             if (widget.formKey.currentState!.validate() && _genero != null) {
+              // final configuracion = Configuracion(
+              //   int.parse(widget.pesoController.text),
+              //   int.parse(widget.estaturaController.text),
+              //   int.parse(widget.edadController.text),
+              //   _genero!,
+              // );
+              // final box = Hive.box<Configuracion>('configuracionBox');
+              // await box.add(configuracion);
               widget.onGuardar(_genero!);
               Navigator.of(context).pop();
             } else if (_genero == null) {
