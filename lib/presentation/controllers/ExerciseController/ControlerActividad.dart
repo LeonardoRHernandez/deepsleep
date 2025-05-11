@@ -22,6 +22,8 @@ class Actividad with ChangeNotifier {
   double get min => _min;
   double get max => _max;
   double get ritmoCardiaco => _ritmoCardiaco;
+  int _estado = 0; // 0: Escaneando, 1: Conectado, 2: Error, 3: Desconectado
+  int get estado => _estado;
 
   void agregarDatoBLE(int nuevoDato) {
     if (nuevoDato > 30) {
@@ -31,6 +33,7 @@ class Actividad with ChangeNotifier {
       _promedio = _estadistica["P"]!;
       _min = _estadistica["Mn"]!;
       _max = _estadistica["Mx"]!;
+      _estado =_ble.estado;
       notifyListeners();
     }
   }

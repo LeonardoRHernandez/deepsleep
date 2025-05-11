@@ -1,8 +1,10 @@
+import 'package:deepsleep/presentation/views/ajustes/widgets/botonBlue.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:deepsleep/presentation/views/ajustes/widgets/encabezado_ajustes.dart';
 import 'package:deepsleep/presentation/views/ajustes/widgets/tarjeta_dato.dart';
 import 'package:deepsleep/presentation/views/ajustes/widgets/formulario_ajustes.dart';
+import 'package:deepsleep/presentation/views/ajustes/widgets/botonBlue.dart';
 
 class PantallaAjustes extends StatefulWidget {
   final void Function({bool redirigirASueno}) desbloquearPantallas;
@@ -141,38 +143,18 @@ class _PantallaAjustesState extends State<PantallaAjustes> {
                         : Colors.pink,
                   ),
                   const SizedBox(height: 20),
-                  ElevatedButton.icon(
-                    onPressed: () {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
-                            content:
-                                Text("Bluetooth no implementado aún")),
-                      );
-                    },
-                    icon: const Icon(Icons.bluetooth),
-                    label: const Text("Bluetooth"),
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.blueAccent,
-                      foregroundColor: Colors.white,
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 24, vertical: 14),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(14),
-                      ),
-                    ),
-                  ),
+                  BotoBluetooh()
                 ],
               ),
             ),
           ],
         ),
       ),
-      floatingActionButton: FloatingActionButton.extended(
+      floatingActionButton: FloatingActionButton(
         onPressed: _editarDatos,
-        icon: const Icon(Icons.edit, color: Colors.white),
-        label: const Text("Editar datos",
-            style: TextStyle(color: Colors.white)),
-        backgroundColor: Colors.deepPurple,
+        child: const Icon(Icons.edit, color: Colors.white),
+        backgroundColor: Colors.blue,
+        tooltip: 'Editar Datos',
       ),
     );
   }

@@ -25,6 +25,7 @@ class Controllers with ChangeNotifier {
   final Graficar _graficar = Graficar();
   List<FlSpot> get list20Graf => _graficar.list20Graf(_actividad.datos);
   List<FlSpot> get listGraf => _graficar.listGraf(_actividad.datos);
+  int get estado=> _actividad.estado;
   
   // Inicia la generación automática de datos
 
