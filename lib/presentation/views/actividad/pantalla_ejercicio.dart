@@ -1,4 +1,5 @@
 // Pantallas/pantalla_ejercicio.dart
+import 'package:deepsleep/presentation/views/actividad/widgets/tarjetaActividad.dart';
 import 'package:flutter/material.dart';
 import 'package:deepsleep/presentation/views/actividad/widgets/Grafico.dart';
 import 'package:deepsleep/presentation/views/actividad/widgets/MetricCard.dart';
@@ -31,6 +32,8 @@ class _PantallaEjercicioState extends State<PantallaEjercicio> {
                     ProgresoWidget(),
                     const SizedBox(height: 16),
                     BuildMetricos(),
+                    const SizedBox(height: 16),
+                    ActivityStatusCard(),
                     const SizedBox(height: 16),
                     BuildListaEjercicios(),
                     const SizedBox(height: 16),

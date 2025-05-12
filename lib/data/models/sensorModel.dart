@@ -1,3 +1,28 @@
+enum UserActivity {
+  resting,
+  walking,
+  exercising,
+}
+class ActivitySession {
+  final UserActivity activity;
+  final DateTime startTime;
+  final DateTime endTime;
+  final double averageHeartRate;
+
+  ActivitySession({
+    required this.activity,
+    required this.startTime,
+    required this.endTime,
+    required this.averageHeartRate,
+  });
+
+  Duration get duration => endTime.difference(startTime);
+
+  @override
+  String toString() {
+    return "$activity | ${duration.inSeconds}s | HR: ${averageHeartRate.toStringAsFixed(1)}";
+  }
+}
 class SensorData {
   final DateTime timestamp;
   final int heartRate;
@@ -15,3 +40,4 @@ class SensorData {
     required this.steps,
   });
 }
+

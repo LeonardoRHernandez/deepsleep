@@ -1,3 +1,4 @@
+import 'package:deepsleep/presentation/controllers/ExerciseController/actividad.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'presentation/views/Sueno/pantalla_sueno.dart';
@@ -26,7 +27,10 @@ void main() async {
 
   runApp(
     MultiProvider(
-      providers: [ChangeNotifierProvider(create: (_) => Controllers())],
+      providers: [
+        ChangeNotifierProvider(create: (_) => Controllers()),
+        ChangeNotifierProvider(create: (_) => ActivityDetector()),
+      ],
       child: const MiApp(),
     ),
   );
