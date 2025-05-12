@@ -7,12 +7,15 @@ class BuildExerciseItem extends StatelessWidget {
   const BuildExerciseItem({
     super.key,
     required this.title,
-    required this.subtitle,
+    // required this.subtitle,
+    required this.fecha,
+    required this.duracion,
     required this.kcal,
   });
 
   final String title;
-  final String subtitle;
+  final String fecha;
+  final String duracion;
   final int kcal;
 
   @override
@@ -37,7 +40,7 @@ class BuildExerciseItem extends StatelessWidget {
                   style: const TextStyle(fontWeight: FontWeight.bold),
                 ),
                 Text(
-                  subtitle,
+                  fecha+" - "+duracion,
                   style: const TextStyle(color: Colors.grey, fontSize: 12),
                 ),
               ],
@@ -68,16 +71,16 @@ class BuildListaEjercicios extends StatelessWidget {
     //final List<Map<String, dynamic>> ejercicios =
     //    ListaEjercicios().exerciseList;
     final List<Ejercicio> ejercicios = [
-      Ejercicio("Cardio Intenso", "15 oct - 1h 20 min", 300),
-      Ejercicio("Entrenamiento de Fuerza", "14 oct - 0h 40 min", 450),
-      Ejercicio("Yoga", "13 oct - 30 min", 200),
-      Ejercicio("Caminata", "12 oct - 1h 10 min", 250),
-      Ejercicio("Natación", "11 oct - 50 min", 400),
-      Ejercicio("Ciclismo", "10 oct - 1h 30 min", 350),
-      Ejercicio("Pilates", "9 oct - 45 min", 220),
-      Ejercicio("Entrenamiento HIIT", "8 oct - 30 min", 500),
-      Ejercicio("Zumba", "7 oct - 1h", 300),
-      Ejercicio("Entrenamiento de Resistencia", "6 oct - 1h 15 min", 400),
+      Ejercicio("Cardio Intenso", "15 oct","1h 20 min", 300),
+      Ejercicio("Entrenamiento de Fuerza", "14 oct","0h 40 min", 450),
+      Ejercicio("Yoga", "13 oct","0h 30 min", 200),
+      Ejercicio("Caminata", "12 oct","1h 10 min", 250),
+      Ejercicio("Natación", "11 oct","0h 50 min", 400),
+      Ejercicio("Ciclismo", "10 oct","1h 30 min", 350),
+      Ejercicio("Pilates", "9 oct","0h 45 min", 220),
+      Ejercicio("Entrenamiento HIIT", "8 oct","0h 30 min", 500),
+      Ejercicio("Zumba", "7 oct","1h", 300),
+      Ejercicio("Entrenamiento de Resistencia", "6 oct","1h 15 min", 400),
     ];
 
     return ListView.builder(
@@ -90,7 +93,8 @@ class BuildListaEjercicios extends StatelessWidget {
           children: [
             BuildExerciseItem(
               title: ejercicio.title,
-              subtitle: ejercicio.subtitle,
+              fecha: ejercicio.fecha,
+              duracion: ejercicio.duracion,
               kcal: ejercicio.kcal,
             ),
             const SizedBox(height: 6),

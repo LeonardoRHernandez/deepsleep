@@ -24,6 +24,7 @@ class Actividad with ChangeNotifier {
   double get ritmoCardiaco => _ritmoCardiaco;
   int _estado = 0; // 0: Escaneando, 1: Conectado, 2: Error, 3: Desconectado
   int get estado => _estado;
+  
 
   void agregarDatoBLE(int nuevoDato) {
     if (nuevoDato > 30) {
