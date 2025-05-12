@@ -1,8 +1,35 @@
 import 'dart:math';
+import 'package:deepsleep/data/models/ejercicioModel.dart';
 import 'package:flutter/foundation.dart';
 import 'package:deepsleep/data/models/sensorModel.dart';
+import 'package:deepsleep/presentation/controllers/ExerciseController/ControlerActividad.dart';
 
 class ActivityDetector extends ChangeNotifier {
+  String _nombreMes(int mes) {
+  const meses = [
+    "ene", "feb", "mar", "abr", "may", "jun",
+    "jul", "ago", "sep", "oct", "nov", "dic"
+  ];
+  return meses[mes - 1];
+}
+
+String _nombreActividad(UserActivity tipo) {
+  switch (tipo) {
+    case UserActivity.walking:
+      return "Caminata";
+    case UserActivity.exercising:
+      return "Ejercicio";
+    default:
+      return "Desconocido";
+  }
+}
+
+int _caloriasEstimadas(UserActivity tipo, int minutos, double hr) {
+  final met = tipo == UserActivity.exercising ? 7.0 : 3.5;
+  final peso = 85.0; // en kg, ajustable si quieres
+  return ((met * 3.5 * peso / 200) * minutos).round();
+}
+
   final List<SensorData> _window = [];
   final List<ActivitySession> _history = [];
   List<ActivitySession> get history => List.unmodifiable(_history);
@@ -90,21 +117,43 @@ class ActivityDetector extends ChangeNotifier {
     }
   }
 
-  List<ActivitySession> extraerSesionesActivas() {
-    final activas =
-        _history
-            .where(
-              (s) =>
-                  s.activity == UserActivity.walking ||
-                  s.activity == UserActivity.exercising,
-            )
-            .toList();
+  void extraerSesionesActivas(List<Ejercicio> actividad) {
+    // Filtrar sesiones activas
+    // final activas = _history.where((s) => s.activity == UserActivity.walking).toList();
+    // final activas = _history.where((s) => s.activity == UserActivity.exercising).toList();
+    // final activas = _history.where((s) => s.activity == UserActivity.resting).toList();
+  final activas = _history.where(
+    (s) =>
+        s.activity == UserActivity.walking ||
+        s.activity == UserActivity.exercising,
+  ).toList();
 
-    // Eliminarlas del historial original
-    _history.removeWhere((s) => activas.contains(s));
+  // Eliminar del historial
+  _history.removeWhere((s) => activas.contains(s));
 
-    return activas;
+  // Procesar cada sesión a Ejercicio
+  for (final s in activas) {
+    final duracion = s.endTime.difference(s.startTime);
+    final minutos = duracion.inMinutes;
+    final duracionStr = "${duracion.inHours}h ${minutos.remainder(60)}min";
+
+    final fecha = "${s.endTime.day} ${_nombreMes(s.endTime.month)} ${s.endTime.year}";
+
+    final kcal = _caloriasEstimadas(s.activity, minutos, s.averageHeartRate);
+
+    final ejercicio = Ejercicio(
+      _nombreActividad(s.activity),
+      fecha,
+      duracionStr,
+      kcal,
+    );
+  
+    actividad.add(ejercicio);
   }
+
+  notifyListeners();
+}
+
 
   UserActivity _classify(double heartRate, double accel, int stepsDelta) {
     // if (heartRate > 120 && accel > 3.0 && stepsDelta > 20) {

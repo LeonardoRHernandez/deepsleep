@@ -60,6 +60,7 @@ class Actividad with ChangeNotifier {
   void agregaDatoBLE(
     BuildContext context, {
     required int heartRate,
+    required int ritmoPromedio,
     required int steps,
     required double ax,
     required double ay,
@@ -71,6 +72,7 @@ class Actividad with ChangeNotifier {
     detector.update(
       SensorData(
         timestamp: DateTime.now(),
+        ritmoPromedio:ritmoPromedio,
         heartRate: heartRate,
         accelX: ax,
         accelY: ay,
@@ -111,21 +113,31 @@ class Actividad with ChangeNotifier {
       _activity.update(
         SensorData(
           timestamp: DateTime.now(),
-          heartRate: _promedio.toInt(),
+          heartRate: _ritmoCardiaco.toInt(),
+          ritmoPromedio: _promedio.toInt(),
           accelX: _ax,
           accelY: _ay,
           accelZ: _az,
           steps: _steps.toInt(),
         ),
       );
-      if (_activity.extraerSesionesActivas().isNotEmpty) {
-        print("ultima actividad");
-      print(_activity.extraerSesionesActivas());
-      } else {
-        //print("no hay sesiones activas");
-      }
       
       //print("noticar a listeners");
+       _activity.extraerSesionesActivas(_ejercicios);
+      // if (actividad.isNotEmpty) {
+      //   //print("Actividad: $actividad");
+      //   //print("Actividad: $actividad");
+      //   _ejercicios.add(
+      //     Ejercicio(
+      //       actividad[0].activity.toString(),
+      //       actividad[0].startTime.toString(),
+      //       actividad[0].duration.inMinutes.toString(),
+      //       actividad[0].averageHeartRate.toInt(),
+      //     ),
+      //   );
+        
+      // }
+      //print("Ejercicio: ${_ejercicios.last}");
       notifyListeners();
     }
   }

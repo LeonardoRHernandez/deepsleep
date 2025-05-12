@@ -25,6 +25,7 @@ class ActivitySession {
 }
 class SensorData {
   final DateTime timestamp;
+  final int ritmoPromedio;
   final int heartRate;
   final double accelX;
   final double accelY;
@@ -33,6 +34,7 @@ class SensorData {
 
   SensorData({
     required this.timestamp,
+    required this.ritmoPromedio,
     required this.heartRate,
     required this.accelX,
     required this.accelY,
