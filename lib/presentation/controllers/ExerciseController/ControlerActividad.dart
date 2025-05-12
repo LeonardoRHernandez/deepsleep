@@ -1,3 +1,4 @@
+import 'package:deepsleep/data/models/ejercicioModel.dart';
 import 'package:flutter/material.dart';
 import 'dart:math';
 import 'dart:async';
@@ -24,8 +25,24 @@ class Actividad with ChangeNotifier {
   double get ritmoCardiaco => _ritmoCardiaco;
   int _estado = 0; // 0: Escaneando, 1: Conectado, 2: Error, 3: Desconectado
   int get estado => _estado;
-  
-
+  final List<Ejercicio> _ejercicios = [
+      //Ejercicio("Cardio Intenso", "15 oct","1h 20 min", 300),
+      //Ejercicio("Entrenamiento de Fuerza", "14 oct","0h 40 min", 450),
+      //Ejercicio("Yoga", "13 oct","0h 30 min", 200),
+      //Ejercicio("Caminata", "12 oct","1h 10 min", 250),
+      //Ejercicio("Natación", "11 oct","0h 50 min", 400),
+      //Ejercicio("Ciclismo", "10 oct","1h 30 min", 350),
+      //Ejercicio("Pilates", "9 oct","0h 45 min", 220),
+      Ejercicio("Entrenamiento HIIT", "8 oct","0h 30 min", 500),
+      Ejercicio("Zumba", "7 oct","1h", 300),
+      //Ejercicio("Entrenamiento de Resistencia", "6 oct","1h 15 min", 400),
+    ];
+  //List<Ejercicio> get ejercicios => _ejercicios;
+  void agregarEjercicio(Ejercicio nuevoEjercicio) {
+    _ejercicios.add(nuevoEjercicio);
+    notifyListeners();
+  } 
+  List<Ejercicio> get ejerciciosList => _ejercicios;  
   void agregarDatoBLE(int nuevoDato) {
     if (nuevoDato > 30) {
       _datos.add(nuevoDato);

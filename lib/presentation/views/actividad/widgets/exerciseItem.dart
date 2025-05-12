@@ -1,7 +1,9 @@
+import 'package:deepsleep/presentation/controllers/Controllers.dart';
 import 'package:flutter/material.dart';
 
 //import 'package:deepsleep/presentation/controllers/ExerciseController/historialExercice.dart';
 import 'package:deepsleep/data/models/ejercicioModel.dart';
+import 'package:provider/provider.dart';
 
 class BuildExerciseItem extends StatelessWidget {
   const BuildExerciseItem({
@@ -70,25 +72,20 @@ class BuildListaEjercicios extends StatelessWidget {
     // Lista de ejercicios
     //final List<Map<String, dynamic>> ejercicios =
     //    ListaEjercicios().exerciseList;
-    final List<Ejercicio> ejercicios = [
-      Ejercicio("Cardio Intenso", "15 oct","1h 20 min", 300),
-      Ejercicio("Entrenamiento de Fuerza", "14 oct","0h 40 min", 450),
-      Ejercicio("Yoga", "13 oct","0h 30 min", 200),
-      Ejercicio("Caminata", "12 oct","1h 10 min", 250),
-      Ejercicio("Natación", "11 oct","0h 50 min", 400),
-      Ejercicio("Ciclismo", "10 oct","1h 30 min", 350),
-      Ejercicio("Pilates", "9 oct","0h 45 min", 220),
-      Ejercicio("Entrenamiento HIIT", "8 oct","0h 30 min", 500),
-      Ejercicio("Zumba", "7 oct","1h", 300),
-      Ejercicio("Entrenamiento de Resistencia", "6 oct","1h 15 min", 400),
-    ];
+    
+
+    return Consumer<Controllers>(
+  builder: (context, provider, child) {
+    final ejercicios = provider.actividad.ejerciciosList;
+    final total = ejercicios.length;
+    final count = total >= 3 ? 3 : total;
 
     return ListView.builder(
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),
-      itemCount: ejercicios.length,
+      itemCount: count,
       itemBuilder: (context, index) {
-        final ejercicio = ejercicios[index];
+        final ejercicio = ejercicios[total - 1 - index]; // Desde el final
         return Column(
           children: [
             BuildExerciseItem(
@@ -102,5 +99,8 @@ class BuildListaEjercicios extends StatelessWidget {
         );
       },
     );
+  },
+);
+
   }
 }
