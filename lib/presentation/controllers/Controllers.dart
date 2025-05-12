@@ -9,9 +9,13 @@ import 'package:deepsleep/presentation/controllers/ExerciseController/graficoCon
 
 class Controllers with ChangeNotifier {
   Controllers() {
-    _actividad.addListener(notifyListeners);
-    cargarSuenoDesdeHive();
-  }
+  _actividad.addListener(notifyListeners);
+  cargarSuenoDesdeHive();
+  _timer = Timer.periodic(Duration(seconds:10), (_) {
+    _actividad.evaluarSueno();
+  });
+}
+
 
   final _sueno = Sueno.empty();
   Sueno get sueno => _sueno;

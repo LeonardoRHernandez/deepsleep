@@ -13,6 +13,11 @@ class Actividad with ChangeNotifier {
   Actividad() {
     _activity.addListener(notifyListeners);
   }
+  bool _estaDormido = false;
+DateTime _ultimoMovimiento = DateTime.now();
+
+bool get estaDormido => _estaDormido;
+
   final ActivityDetector _activity = ActivityDetector();
   final BLEService _ble = BLEService();
   double _promedio = 0;
@@ -56,6 +61,28 @@ class Actividad with ChangeNotifier {
     _ejercicios.add(nuevoEjercicio);
     notifyListeners();
   }
+  void evaluarSueno() {
+  double movimiento = sqrt(_ax * _ax + _ay * _ay + _az * _az);
+  print("Movimiento: $movimiento");
+  final ahora = DateTime.now();
+
+  
+  if (movimiento > 10 || _steps > 0) {
+    _ultimoMovimiento = ahora;
+  }
+
+  final minutosSinMovimiento = ahora.difference(_ultimoMovimiento).inSeconds;
+  print("segundos sin movimiento: $minutosSinMovimiento");
+
+  if (minutosSinMovimiento > 1 && _ritmoCardiaco < 60) {
+    _estaDormido = true;
+  } else {
+    _estaDormido = false;
+  }
+
+  notifyListeners();
+}
+
 
   void agregaDatoBLE(
     BuildContext context, {
