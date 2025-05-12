@@ -1,16 +1,22 @@
 import 'package:deepsleep/data/models/ejercicioModel.dart';
 import 'package:deepsleep/data/models/sensorModel.dart';
+import 'package:deepsleep/data/models/suenoModel.dart';
 import 'package:deepsleep/presentation/controllers/ExerciseController/actividad.dart';
 import 'package:flutter/material.dart';
 import 'dart:math';
 import 'dart:async';
 import 'package:deepsleep/presentation/controllers/ExerciseController/graficoController.dart';
 import 'package:deepsleep/data/services/CleintServer.dart'; // importa el servicio BLE
+import 'package:hive/hive.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart'; // para pedir permisos
 
 class Actividad with ChangeNotifier {
-  Actividad() {
+  final void Function(Sueno)? onNuevoSueno;
+  DateTime? _inicioSueno;
+final List<Sueno> _historialSueno = [];
+
+  Actividad({this.onNuevoSueno}) {
     _activity.addListener(notifyListeners);
   }
   bool _estaDormido = false;
@@ -61,27 +67,67 @@ bool get estaDormido => _estaDormido;
     _ejercicios.add(nuevoEjercicio);
     notifyListeners();
   }
-  void evaluarSueno() {
+  void evaluarSueno() async {
   double movimiento = sqrt(_ax * _ax + _ay * _ay + _az * _az);
-  print("Movimiento: $movimiento");
   final ahora = DateTime.now();
 
-  
   if (movimiento > 10 || _steps > 0) {
     _ultimoMovimiento = ahora;
   }
 
-  final minutosSinMovimiento = ahora.difference(_ultimoMovimiento).inSeconds;
-  print("segundos sin movimiento: $minutosSinMovimiento");
-
-  if (minutosSinMovimiento > 1 && _ritmoCardiaco < 60) {
+  final segundosSinMovimiento = ahora.difference(_ultimoMovimiento).inSeconds;
+  //print("Duracion: $segundosSinMovimiento");
+  if (segundosSinMovimiento > 60 && _ritmoCardiaco < 60) {
+    if (!_estaDormido) {
+      _inicioSueno = ahora;
+    }
     _estaDormido = true;
   } else {
+    if (_estaDormido && _inicioSueno != null) {
+      DateTime finSueno = ahora;
+
+      Duration duracion = finSueno.difference(_inicioSueno!);
+      String duracionTexto =
+          "${duracion.inHours}h ${duracion.inMinutes.remainder(60)}m";
+
+      String fecha = "${_inicioSueno!.day}/${_inicioSueno!.month}/${_inicioSueno!.year}";
+      String horaInicio = "${_inicioSueno!.hour}:${_inicioSueno!.minute.toString().padLeft(2, '0')}";
+      String horaFinal = "${finSueno.hour}:${finSueno.minute.toString().padLeft(2, '0')}";
+      //la eficiencia funcionna igual que las estrellas
+      String eficiencia = "${(duracion.inHours / 8 * 100).clamp(0, 100).toStringAsFixed(2)}%";
+      //estrelas salen de 0 a 5 dependiendo si durmio 8 horas o menos dividiendolo en 5 partes iguales
+      // 0-1.6 horas = 0 estrellas
+      int estrellas = duracion.inHours > 8
+          ? 5
+          : (duracion.inHours / 1.6).floor().clamp(0, 5);
+      print("Duracion: $duracionTexto");
+      //print("estrellas: $estrellas");
+      final nuevoSueno = Sueno(
+        fecha,
+        estrellas,
+        duracionTexto,
+        horaInicio,
+        horaFinal,
+        eficiencia,
+      );
+
+      _historialSueno.add(nuevoSueno);
+      final box = await Hive.openBox<Sueno>('suenoBox');
+      await box.add(nuevoSueno);
+      if (onNuevoSueno != null) {
+  onNuevoSueno!(nuevoSueno); // se lo pasa al controlador
+}
+
+      _inicioSueno = null;
+    }
+
     _estaDormido = false;
   }
+  
 
   notifyListeners();
 }
+
 
 
   void agregaDatoBLE(

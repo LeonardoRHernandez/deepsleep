@@ -164,29 +164,37 @@ void mostrarFormularioDormir(BuildContext context) {
                                   DateTime hoy = DateTime.now();
                                   String fechaFormateada =
                                       "${hoy.year}-${hoy.month.toString().padLeft(2, '0')}-${hoy.day.toString().padLeft(2, '0')}";
-
+                                  //las estrellas salen de 0 a 5 dependiendo si durmio 8 horas o menos dividiendolo en 5 partes iguales
+                                  int estrellas = data == "Sin datos"
+                                      ? 0
+                                      : (horaDespertar.hour -
+                                                  horaDormir.hour)
+                                              .clamp(0, 5)
+                                              .toInt();
+                                  String eficiencia =
+                                      "${(horaDespertar.hour / 8 * 100).clamp(0, 100).toStringAsFixed(2)}%";
                                   Provider.of<Controllers>(
                                     context,
                                     listen: false,
                                   ).agregarSueno(
                                     Sueno(
                                       fechaFormateada,
-                                      0,
+                                      estrellas,
                                       data,
                                       horaDormirStr,
                                       horaDespertarStr,
-                                      "0",
+                                      eficiencia,
                                     ),
                                   );
                                   var suenoBox = Hive.box<Sueno>('suenoBox');
                                   suenoBox.add(
                                     Sueno(
                                       fechaFormateada,
-                                      5,
+                                      estrellas,
                                       data,
                                       horaDormirStr,
                                       horaDespertarStr,
-                                      "70",
+                                      eficiencia,
                                     ),
                                   );
 

@@ -1,38 +1,44 @@
-import 'package:deepsleep/presentation/controllers/Controllers.dart';
 import 'package:deepsleep/data/models/suenoModel.dart';
 import 'package:flutter/material.dart';
 import 'package:deepsleep/presentation/views/Sueno/widgets/statCard.dart';
-import 'package:provider/provider.dart';
+import 'package:hive/hive.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 
 class BuildRecordAndAverage extends StatelessWidget {
   const BuildRecordAndAverage({super.key});
 
   @override
   Widget build(BuildContext context) {
-    //String tiempoMaximo=calcularTiempoMaximo(provider.listsueno.historialSueno);
-    var provider = Provider.of<Controllers>(context);
-    String tiempoMaximo = calcularTiempoMaximo(provider.listsueno);
-    List<String> partes = tiempoMaximo.split('|');
-    String tiempo = partes[0]; // Tiempo máximo
-    String fecha = partes[1]; // Fecha asociada al tiempo máximo
+    return ValueListenableBuilder(
+      valueListenable: Hive.box<Sueno>('suenoBox').listenable(),
+      builder: (context, Box<Sueno> box, _) {
+        final historial = box.values.toList();
 
-    String Promedio7Dias = calcularPromedioUltimos7Dias(provider.listsueno);
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-      children: [
-        BuildStatCard(
-          icon: '🏆',
-          title: 'Tu récord',
-          value: '$tiempo',
-          subtitle: '$fecha',
-        ),
-        BuildStatCard(
-          icon: '📊',
-          title: 'Promedio',
-          value: '$Promedio7Dias',
-          subtitle: 'Últimos 7 registros',
-        ),
-      ],
+        String tiempoMaximo = calcularTiempoMaximo(historial);
+        List<String> partes = tiempoMaximo.split('|');
+        String tiempo = partes[0];
+        String fecha = partes[1];
+
+        String promedio7Dias = calcularPromedioUltimos7Dias(historial);
+
+        return Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            BuildStatCard(
+              icon: '🏆',
+              title: 'Tu récord',
+              value: tiempo,
+              subtitle: fecha,
+            ),
+            BuildStatCard(
+              icon: '📊',
+              title: 'Promedio',
+              value: promedio7Dias,
+              subtitle: 'Últimos 7 registros',
+            ),
+          ],
+        );
+      },
     );
   }
 }
@@ -44,60 +50,52 @@ String calcularTiempoMaximo(List<Sueno> historialSueno) {
   int maxMinutos = 0;
 
   for (var sueno in historialSueno) {
-    String tiempo = sueno.duracion; // Ejemplo: "7h 42m"
-    String fecha = sueno.fecha; // Fecha asociada al sueño
+    String tiempo = sueno.duracion;
+    String fecha = sueno.fecha;
 
-    // Divide el tiempo en horas y minutos
     List<String> partes = tiempo.split('h');
-    int horas = int.parse(partes[0]);
-    int minutos = int.parse(partes[1].replaceAll('m', '').trim());
+    int horas = int.tryParse(partes[0].trim()) ?? 0;
+    int minutos = int.tryParse(partes[1].replaceAll('m', '').trim()) ?? 0;
 
-    // Verifica si este tiempo es mayor que el máximo actual
     if (horas > maxHoras || (horas == maxHoras && minutos > maxMinutos)) {
       maxHoras = horas;
       maxMinutos = minutos;
       tiempoMaximo = "${horas}H\n${minutos}M";
-      fechaMaxima = fecha; // Actualiza la fecha asociada al tiempo máximo
+      fechaMaxima = fecha;
     }
   }
 
-  return "$tiempoMaximo|$fechaMaxima"; // Retorna ambos valores separados por un delimitador
+  return "$tiempoMaximo|$fechaMaxima";
 }
 
 String calcularPromedioUltimos7Dias(List<Sueno> historialSueno) {
-  if (historialSueno.isEmpty) {
-    return "0H\n0M"; // Si no hay datos, retorna 0
-  }
+  if (historialSueno.isEmpty) return "0H\n0M";
+
   int totalHoras = 0;
   int totalMinutos = 0;
   int diasContados = 0;
 
-  // Itera sobre los últimos 7 elementos del historial
   for (var i = historialSueno.length - 1; i >= 0 && diasContados < 7; i--) {
-    String tiempo = historialSueno[i].duracion; // Ejemplo: "7h 42m"
+    String tiempo = historialSueno[i].duracion;
 
-    // Divide el tiempo en horas y minutos
     List<String> partes = tiempo.split('h');
-    int horas = int.parse(partes[0]);
-    int minutos = int.parse(partes[1].replaceAll('m', '').trim());
+    int horas = int.tryParse(partes[0].trim()) ?? 0;
+    int minutos = int.tryParse(partes[1].replaceAll('m', '').trim()) ?? 0;
 
-    // Suma las horas y minutos al total
     totalHoras += horas;
     totalMinutos += minutos;
     diasContados++;
   }
 
-  // Convierte los minutos totales en horas y minutos
   totalHoras += totalMinutos ~/ 60;
   totalMinutos = totalMinutos % 60;
 
-  // Calcula el promedio
   if (diasContados > 0) {
     int promedioHoras = totalHoras ~/ diasContados;
     int promedioMinutos = totalMinutos ~/ diasContados;
 
     return "${promedioHoras}H\n${promedioMinutos}M";
   } else {
-    return "0H\n0M"; // Si no hay datos, retorna 0
+    return "0H\n0M";
   }
 }

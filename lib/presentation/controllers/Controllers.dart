@@ -9,23 +9,34 @@ import 'package:deepsleep/presentation/controllers/ExerciseController/graficoCon
 
 class Controllers with ChangeNotifier {
   Controllers() {
-  _actividad.addListener(notifyListeners);
-  cargarSuenoDesdeHive();
-  _timer = Timer.periodic(Duration(seconds:10), (_) {
-    _actividad.evaluarSueno();
-  });
-}
+    _actividad = Actividad(
+      onNuevoSueno: agregarSueno,
+    );
+    _actividad.addListener(notifyListeners);
+    cargarSuenoDesdeHive();
+    _timer = Timer.periodic(Duration(seconds: 10), (_) {
+      _actividad.evaluarSueno();
+    });
+  }
+
+  late final Actividad _actividad;
+  Actividad get actividad => _actividad;
+
+  final List<Sueno> _listsueno = [];
+  List<Sueno> get listsueno => _listsueno;
+
+
 
 
   final _sueno = Sueno.empty();
   Sueno get sueno => _sueno;
-  final _actividad = Actividad();
-  Actividad get actividad => _actividad;
-  final List<Sueno> _listsueno = []; //ListSueno();
+
+  //Actividad get actividad => _actividad;
+  //final List<Sueno> _listsueno = []; //ListSueno();
   Timer? _timer;
   final DateTime _horaInicio = DateTime.now();
   DateTime get horaInicio => _horaInicio;
-  List<Sueno> get listsueno => _listsueno;
+  //List<Sueno> get listsueno => _listsueno;
   final Graficar _graficar = Graficar();
   List<FlSpot> get list20Graf => _graficar.list20Graf(_actividad.datos);
   List<FlSpot> get listGraf => _graficar.listGraf(_actividad.datos);
